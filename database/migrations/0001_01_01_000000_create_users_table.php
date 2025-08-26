@@ -4,19 +4,29 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->uuid('id')->primary();
+            $table->string('nama_lengkap');
+            $table->string('nik')->unique();
+            $table->dateTime('tanggal_lahir');
+            $table->string('alamat_lengkap');
+            $table->string('nomor_telepon');
+            $table->string('pekerjaan');
+            $table->string('file_foto_ktp')->nullable();
+            $table->string('file_pas_foto')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', [
+                'anggota',
+                'karyawan',
+                'pengurus'
+            ]);
             $table->rememberToken();
             $table->timestamps();
         });
