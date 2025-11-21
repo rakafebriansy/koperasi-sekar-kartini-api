@@ -17,7 +17,7 @@ class AuthController extends Controller
 
         $user = User::where('member_number', $credentials['member_number'])->first();
 
-        if (! Hash::check($credentials['password'], $user->password)) {
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return response()->json(['success' => false, 'message' => 'Invalid member number or password.'], 401);
         }
 
@@ -28,8 +28,6 @@ class AuthController extends Controller
         if (! $user->is_active) {
             return response()->json(['success' => false, 'message' => 'Account is not active.'], 403);
         }
-
-        $user->tokens()->delete();
 
         $token = $user->createToken('api-token')->plainTextToken;
 
