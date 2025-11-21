@@ -11,35 +11,39 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('nama_lengkap');
-            $table->string('nik')->unique();
-            $table->dateTime('tanggal_lahir');
-            $table->string('alamat_lengkap');
-            $table->string('nomor_telepon');
-            $table->string('pekerjaan');
-            $table->string('file_foto_ktp')->nullable();
-            $table->string('file_pas_foto')->nullable();
+            $table->id()->primary();
+            $table->string('name');
+            $table->string('member_number')->unique();
+            $table->string('identity_number')->unique();
+            $table->date('birth_date');
+            $table->string('address');
+            $table->string('occupation');
+            $table->string('identity_card_photo')->nullable();
+            $table->string('self_photo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', [
-                'anggota',
-                'karyawan',
-                'pengurus'
+                'group_member',
+                'employee',
+                'admin'
             ]);
+            $table->boolean('is_verified')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->unsignedBigInteger('work_area_id')->nullable();
+            $table->unsignedBigInteger('group_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->id();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
