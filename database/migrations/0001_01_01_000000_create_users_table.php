@@ -29,7 +29,7 @@ return new class extends Migration {
                 'admin'
             ]);
             $table->boolean('is_verified')->default(false);
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(false);
             $table->unsignedBigInteger('work_area_id')->nullable();
             $table->unsignedBigInteger('group_id')->nullable();
             $table->rememberToken();
