@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('member_number')->unique();
             $table->string('identity_number')->unique();
             $table->date('birth_date');
+            $table->string('phone_number');
             $table->string('address');
             $table->string('occupation');
             $table->string('identity_card_photo')->nullable();
