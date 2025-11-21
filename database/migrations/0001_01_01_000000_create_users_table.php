@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('member_number')->unique();
             $table->string('identity_number')->unique();
             $table->date('birth_date');
+            $table->string('phone_number');
             $table->string('address');
             $table->string('occupation');
             $table->string('identity_card_photo')->nullable();
@@ -28,7 +29,7 @@ return new class extends Migration {
                 'admin'
             ]);
             $table->boolean('is_verified')->default(false);
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(false);
             $table->unsignedBigInteger('work_area_id')->nullable();
             $table->unsignedBigInteger('group_id')->nullable();
             $table->rememberToken();
