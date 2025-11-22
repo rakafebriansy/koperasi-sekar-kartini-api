@@ -6,6 +6,7 @@ use App\Http\Controllers\WorkAreaController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register-group-member', [AuthController::class, 'registerGroupMember']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
