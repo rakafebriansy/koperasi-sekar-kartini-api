@@ -18,8 +18,21 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'name',
         'member_number',
-        'password'
+        'identity_number',
+        'birth_date',
+        'phone_number',
+        'address',
+        'occupation',
+        'identity_card_photo',
+        'self_photo',
+        'password',
+        'role',
+        'is_verified',
+        'is_active',
+        'work_area_id',
+        'group_id',
     ];
 
     /**
@@ -41,9 +54,15 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'birth_date' => 'date',
             'password' => 'hashed',
             'is_verified' => 'boolean',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function workArea()
+    {
+        return $this->belongsTo(WorkArea::class);
     }
 }
