@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MemberGroupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkAreaController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware(['role:admin'])->group(function () {
         Route::put('verified/{id}', [UserController::class, 'updateVerified']);
         Route::put('active/{id}', [UserController::class, 'updateActive']);
+    });
+
+    Route::prefix('groups')->middleware(['role:employee'])->group(function () {
+        Route::get('/', [MemberGroupController::class, 'index']);
+        Route::post('/', [MemberGroupController::class, 'store']);
+        Route::get('{id}', [MemberGroupController::class, 'show']);
+        Route::patch('{id}', [MemberGroupController::class, 'update']);
+        Route::delete('{id}', [MemberGroupController::class, 'destroy']);
     });
 });
 
