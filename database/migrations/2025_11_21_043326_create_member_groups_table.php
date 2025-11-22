@@ -23,13 +23,13 @@ return new class extends Migration
             $table->bigInteger('total_social_fund')->default(0);
             $table->boolean('is_active')->default(true);
             $table->unsignedBigInteger('work_area_id')->nullable();
-            $table->foreign('work_area_id')->references('id')->on('work_areas')->cascadeOnDelete();
+            $table->foreign('work_area_id')->references('id')->on('work_areas')->onDelete('set null');
             $table->unsignedBigInteger('chairman_id')->nullable();
-            $table->foreign('chairman_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('chairman_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedBigInteger('facilitator_id')->nullable();
-            $table->foreign('facilitator_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('facilitator_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedBigInteger('treasurer_id')->nullable();
-            $table->foreign('treasurer_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('treasurer_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
         });
     }

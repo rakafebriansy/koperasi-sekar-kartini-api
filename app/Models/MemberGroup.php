@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MemberGroup extends Model
 {
@@ -35,6 +36,11 @@ class MemberGroup extends Model
     public function workArea()
     {
         return $this->belongsTo(WorkArea::class);
+    }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'group_id');
     }
 }
 

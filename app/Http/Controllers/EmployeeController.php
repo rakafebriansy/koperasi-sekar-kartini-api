@@ -7,8 +7,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @OA\Tag(
+ *     name="Employees",
+ *     description="Employee management endpoints"
+ * )
+ */
 class EmployeeController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/employees",
+     *     tags={"Employees"},
+     *     summary="Get all employees",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/User"))
+     *         )
+     *     )
+     * )
+     */
     public function index()
     {
         $employees = User::where('role', 'employee')
@@ -22,6 +44,42 @@ class EmployeeController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/employees",
+     *     tags={"Employees"},
+     *     summary="Create new employee",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 required={"name","member_number","nomor_induk_penduduk","birth_date","phone_number","address","occupation"},
+     *                 @OA\Property(property="name", type="string", example="Siti Nurhaliza"),
+     *                 @OA\Property(property="member_number", type="string", example="EMP001"),
+     *                 @OA\Property(property="nomor_induk_penduduk", type="string", example="3201010101900002"),
+     *                 @OA\Property(property="birth_date", type="string", format="date", example="1990-02-15"),
+     *                 @OA\Property(property="phone_number", type="string", example="081234567891"),
+     *                 @OA\Property(property="address", type="string", example="Jl. Merdeka No. 456"),
+     *                 @OA\Property(property="occupation", type="string", example="Karyawan"),
+     *                 @OA\Property(property="identity_card_photo", type="string", format="binary"),
+     *                 @OA\Property(property="self_photo", type="string", format="binary"),
+     *                 @OA\Property(property="work_area_id", type="integer", example=1)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Employee created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Employee created successfully."),
+     *             @OA\Property(property="data", ref="#/components/schemas/User")
+     *         )
+     *     )
+     * )
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -72,6 +130,28 @@ class EmployeeController extends Controller
         ], 201);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/employees/{id}",
+     *     tags={"Employees"},
+     *     summary="Get employee by ID",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="data", ref="#/components/schemas/User")
+     *         )
+     *     )
+     * )
+     */
     public function show(string $id)
     {
         $employee = User::where('role', 'employee')
@@ -84,6 +164,47 @@ class EmployeeController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Patch(
+     *     path="/api/employees/{id}",
+     *     tags={"Employees"},
+     *     summary="Update employee",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(property="name", type="string", example="Siti Nurhaliza"),
+     *                 @OA\Property(property="member_number", type="string", example="EMP001"),
+     *                 @OA\Property(property="nomor_induk_penduduk", type="string", example="3201010101900002"),
+     *                 @OA\Property(property="birth_date", type="string", format="date", example="1990-02-15"),
+     *                 @OA\Property(property="phone_number", type="string", example="081234567891"),
+     *                 @OA\Property(property="address", type="string", example="Jl. Merdeka No. 456"),
+     *                 @OA\Property(property="occupation", type="string", example="Karyawan"),
+     *                 @OA\Property(property="identity_card_photo", type="string", format="binary"),
+     *                 @OA\Property(property="self_photo", type="string", format="binary"),
+     *                 @OA\Property(property="work_area_id", type="integer", example=1)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Employee updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Employee updated successfully."),
+     *             @OA\Property(property="data", ref="#/components/schemas/User")
+     *         )
+     *     )
+     * )
+     */
     public function update(Request $request, string $id)
     {
         $employee = User::where('role', 'employee')->findOrFail($id);
@@ -151,6 +272,28 @@ class EmployeeController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/employees/{id}",
+     *     tags={"Employees"},
+     *     summary="Delete employee",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Employee deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Employee deleted successfully.")
+     *         )
+     *     )
+     * )
+     */
     public function destroy(string $id)
     {
         $employee = User::where('role', 'employee')->findOrFail($id);
