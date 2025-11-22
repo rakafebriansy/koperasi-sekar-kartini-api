@@ -1,0 +1,157 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Koperasi Sekar Kartini",
+        "description": "API untuk aplikasi koperasi, termasuk autentikasi, transaksi, dan manajemen anggota.",
+        "termsOfService": "http://example.com/terms/",
+        "contact": {
+            "name": "Support Team",
+            "url": "http://example.com/contact",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login a user with member number and password",
+                "description": "Authenticate a user and return an API token.",
+                "operationId": "loginUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "member_number",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "member_number": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|abcd1234efgh5678ijkl9012mnop3456qrst7890"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid member number or password",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid member number or password."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Account is not verified or not active",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account is not verified."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "WorkArea": {
+                "title": "Work Area",
+                "description": "Schema untuk data Work Area",
+                "properties": {
+                    "id": {
+                        "description": "ID unik Work Area",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name_work_area": {
+                        "description": "Nama Work Area",
+                        "type": "string",
+                        "example": "IT Department"
+                    },
+                    "created_at": {
+                        "description": "Waktu dibuat",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-22T12:34:56Z"
+                    },
+                    "updated_at": {
+                        "description": "Waktu terakhir diupdate",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-22T12:34:56Z"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        }
+    ]
+}
