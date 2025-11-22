@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'Sekar Kartini API Docs',
+                'title' => 'Koperasi Sekar Kartini API Documentation',
             ],
 
             'routes' => [
