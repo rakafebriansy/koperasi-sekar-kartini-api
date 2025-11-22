@@ -40,6 +40,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{id}', [MemberGroupController::class, 'show']);
         Route::patch('{id}', [MemberGroupController::class, 'update']);
         Route::delete('{id}', [MemberGroupController::class, 'destroy']);
+        Route::patch('chairman/{id}', [MemberGroupController::class, 'updateChairman']);
+        Route::patch('facilitator/{id}', [MemberGroupController::class, 'updateFacilitator']);
+        Route::patch('treasurer/{id}', [MemberGroupController::class, 'updateTreasurer']);
+    });
+
+    Route::middleware(['role:employee'])->group(function () {
+        Route::patch('users/{id}/group', [UserController::class, 'updateGroupId']);
     });
 });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MemberGroup;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MemberGroupController extends Controller
@@ -88,6 +89,87 @@ class MemberGroupController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Member group deleted successfully.',
+        ]);
+    }
+
+    public function updateChairman(Request $request, string $id)
+    {
+        $memberGroup = MemberGroup::findOrFail($id);
+
+        $validated = $request->validate([
+            'chairman_id' => ['required', 'exists:users,id'],
+        ]);
+
+        $chairman = User::findOrFail($validated['chairman_id']);
+        if ($chairman->role !== 'group_member') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Chairman must be a group member.',
+            ], 403);
+        }
+
+        $memberGroup->update([
+            'chairman_id' => $validated['chairman_id'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Chairman updated successfully.',
+            'data' => $memberGroup->fresh('workArea'),
+        ]);
+    }
+
+    public function updateFacilitator(Request $request, string $id)
+    {
+        $memberGroup = MemberGroup::findOrFail($id);
+
+        $validated = $request->validate([
+            'facilitator_id' => ['required', 'exists:users,id'],
+        ]);
+
+        $facilitator = User::findOrFail($validated['facilitator_id']);
+        if ($facilitator->role !== 'group_member') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Facilitator must be a group member.',
+            ], 403);
+        }
+
+        $memberGroup->update([
+            'facilitator_id' => $validated['facilitator_id'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Facilitator updated successfully.',
+            'data' => $memberGroup->fresh('workArea'),
+        ]);
+    }
+
+    public function updateTreasurer(Request $request, string $id)
+    {
+        $memberGroup = MemberGroup::findOrFail($id);
+
+        $validated = $request->validate([
+            'treasurer_id' => ['required', 'exists:users,id'],
+        ]);
+
+        $treasurer = User::findOrFail($validated['treasurer_id']);
+        if ($treasurer->role !== 'group_member') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Treasurer must be a group member.',
+            ], 403);
+        }
+
+        $memberGroup->update([
+            'treasurer_id' => $validated['treasurer_id'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Treasurer updated successfully.',
+            'data' => $memberGroup->fresh('workArea'),
         ]);
     }
 }

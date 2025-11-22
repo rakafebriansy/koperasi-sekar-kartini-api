@@ -58,5 +58,31 @@ class UserController extends Controller
             'data' => $user->fresh(),
         ]);
     }
+
+    public function updateGroupId(Request $request, string $id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->role !== 'group_member') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only group members can be assigned to a group.',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'group_id' => ['required', 'exists:member_groups,id'],
+        ]);
+
+        $user->update([
+            'group_id' => $validated['group_id'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User group updated successfully.',
+            'data' => $user->fresh(),
+        ]);
+    }
 }
 
