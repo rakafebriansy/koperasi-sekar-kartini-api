@@ -50,15 +50,15 @@ class AuthController extends Controller
 
         $user = User::where('member_number', $credentials['member_number'])->first();
 
-        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json(['success' => false, 'message' => 'Invalid member number or password.'], 401);
         }
 
-        if (! $user->is_verified) {
+        if (!$user->is_verified) {
             return response()->json(['success' => false, 'message' => 'Account is not verified.'], 403);
         }
 
-        if (! $user->is_active) {
+        if (!$user->is_active) {
             return response()->json(['success' => false, 'message' => 'Account is not active.'], 403);
         }
 
@@ -179,7 +179,7 @@ class AuthController extends Controller
         if ($user && $user->currentAccessToken()) {
             $user->currentAccessToken()->delete();
         }
-        
+
         return response()->json(['success' => true, 'message' => 'Logged out successfully.']);
     }
 }
