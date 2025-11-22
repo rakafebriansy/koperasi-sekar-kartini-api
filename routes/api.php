@@ -2,16 +2,17 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkAreaController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register-group-member', [AuthController::class, 'registerGroupMember']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('register-group-member', [AuthController::class, 'registerGroupMember']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('logout', [AuthController::class, 'logout']);
 
-    Route::middleware('role:admin')->prefix('work-areas')->group(function () {
+    Route::prefix('work-areas')->middleware(['role:admin'])->group(function () {
         Route::get('/', [WorkAreaController::class, 'index']);
         Route::post('/', [WorkAreaController::class, 'store']);
         Route::get('{id}', [WorkAreaController::class, 'show']);
@@ -19,12 +20,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{id}', [WorkAreaController::class, 'destroy']);
     });
 
-    Route::middleware('role:admin')->prefix('employees')->group(function () {
+    Route::prefix('employees')->middleware(['role:admin'])->group(function () {
         Route::get('/', [EmployeeController::class, 'index']);
         Route::post('/', [EmployeeController::class, 'store']);
         Route::get('{id}', [EmployeeController::class, 'show']);
         Route::patch('{id}', [EmployeeController::class, 'update']);
         Route::delete('{id}', [EmployeeController::class, 'destroy']);
+    });
+
+    Route::middleware(['role:admin'])->group(function () {
+        Route::put('verified/{id}', [UserController::class, 'updateVerified']);
+        Route::put('active/{id}', [UserController::class, 'updateActive']);
     });
 });
 
