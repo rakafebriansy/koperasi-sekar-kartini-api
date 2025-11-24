@@ -35,11 +35,11 @@
                                 "properties": {
                                     "member_number": {
                                         "type": "string",
-                                        "example": "MEM001"
+                                        "example": "ADM-001"
                                     },
                                     "password": {
                                         "type": "string",
-                                        "example": "password123"
+                                        "example": "admin123"
                                     }
                                 },
                                 "type": "object"
