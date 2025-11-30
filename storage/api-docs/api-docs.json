@@ -29,17 +29,17 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "member_number",
+                                    "phone_number",
                                     "password"
                                 ],
                                 "properties": {
-                                    "member_number": {
+                                    "phone_number": {
                                         "type": "string",
-                                        "example": "ADM-001"
+                                        "example": "087712345678"
                                     },
                                     "password": {
                                         "type": "string",
-                                        "example": "admin123"
+                                        "example": "password"
                                     }
                                 },
                                 "type": "object"
