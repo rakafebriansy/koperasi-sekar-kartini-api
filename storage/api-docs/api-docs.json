@@ -94,22 +94,20 @@
                             "schema": {
                                 "required": [
                                     "name",
-                                    "member_number",
                                     "identity_number",
                                     "birth_date",
                                     "phone_number",
                                     "address",
                                     "occupation",
-                                    "password"
+                                    "password",
+                                    "identity_card_photo",
+                                    "self_photo",
+                                    "work_area_id"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
                                         "example": "Budi Santoso"
-                                    },
-                                    "member_number": {
-                                        "type": "string",
-                                        "example": "MEM001"
                                     },
                                     "identity_number": {
                                         "type": "string",
