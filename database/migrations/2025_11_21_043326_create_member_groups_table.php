@@ -28,6 +28,8 @@ return new class extends Migration
             $table->foreign('chairman_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedBigInteger('facilitator_id')->nullable();
             $table->foreign('facilitator_id')->references('id')->on('users')->onDelete('set null');
+            $table->unsignedBigInteger('secretary_id')->nullable();
+            $table->foreign('secretary_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedBigInteger('treasurer_id')->nullable();
             $table->foreign('treasurer_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
