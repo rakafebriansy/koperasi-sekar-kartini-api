@@ -111,7 +111,7 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'member_number' => ['required', 'string', 'unique:users,identity_number'],
+            // 'member_number' => ['required', 'string', 'unique:users,identity_number'],
             'identity_number' => ['required', 'string', 'unique:users,identity_number'],
             'birth_date' => ['required', 'date'],
             'phone_number' => ['required', 'string'],
@@ -128,8 +128,8 @@ class AuthController extends Controller
             'identity_number.required' => 'NIK wajib diisi.',
             'identity_number.unique' => 'NIK sudah terdaftar.',
             
-            'member_number.required' => 'Nomor Anggota wajib diisi.',
-            'member_number.unique' => 'Nomor Anggota sudah terdaftar.',
+            // 'member_number.required' => 'Nomor Anggota wajib diisi.',
+            // 'member_number.unique' => 'Nomor Anggota sudah terdaftar.',
 
             'birth_date.required' => 'Tanggal lahir wajib diisi.',
             'birth_date.date' => 'Format tanggal lahir tidak valid.',
@@ -170,7 +170,7 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $validated['name'],
-            'member_number' => $validated['member_number'],
+            // 'member_number' => $validated['member_number'],
             'identity_number' => $validated['identity_number'],
             'birth_date' => $validated['birth_date'],
             'phone_number' => $validated['phone_number'],

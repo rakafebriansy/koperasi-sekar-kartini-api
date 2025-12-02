@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -31,16 +32,19 @@ class EmployeeController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        $employees = User::where('role', 'employee')
-            ->with('workArea')
-            ->latest()
-            ->get();
+        $q = User::query()->where('role', 'employee');
+
+        if ($request->input('search')) {
+            $q = $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
+        }
+
+        $employees = $q->get();
 
         return response()->json([
             'success' => true,
-            'data' => $employees,
+            'data' => UserResource::collection($employees),
         ]);
     }
 
@@ -85,14 +89,44 @@ class EmployeeController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'member_number' => ['required', 'string', 'unique:users,member_number'],
-            'nomor_induk_penduduk' => ['required', 'string', 'unique:users,identity_number'],
+            'identity_number' => ['required', 'string', 'unique:users,identity_number'],
             'birth_date' => ['required', 'date'],
             'phone_number' => ['required', 'string'],
             'address' => ['required', 'string'],
             'occupation' => ['required', 'string'],
             'identity_card_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'self_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'work_area_id' => ['nullable', 'exists:work_areas,id'],
+        ], [
+            'name.required' => 'Nama wajib diisi.',
+            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+
+            'identity_number.required' => 'NIK wajib diisi.',
+            'identity_number.unique' => 'NIK sudah terdaftar.',
+
+            'member_number.required' => 'Nomor Anggota wajib diisi.',
+            'member_number.unique' => 'Nomor Anggota sudah terdaftar.',
+
+            'birth_date.required' => 'Tanggal lahir wajib diisi.',
+            'birth_date.date' => 'Format tanggal lahir tidak valid.',
+
+            'phone_number.required' => 'Nomor telepon wajib diisi.',
+
+            'address.required' => 'Alamat wajib diisi.',
+
+            'occupation.required' => 'Pekerjaan wajib diisi.',
+
+            'identity_card_photo.required' => 'Foto KTP wajib diunggah.',
+            'identity_card_photo.image' => 'File foto KTP harus berupa gambar.',
+            'identity_card_photo.mimes' => 'Foto KTP harus berformat JPG, JPEG, atau PNG.',
+            'identity_card_photo.max' => 'Foto KTP maksimal berukuran 2MB.',
+
+            'self_photo.required' => 'Pas Foto wajib diunggah.',
+            'self_photo.image' => 'File Pas Foto harus berupa gambar.',
+            'self_photo.mimes' => 'Pas Foto harus berformat JPG, JPEG, atau PNG.',
+            'self_photo.max' => 'Pas Foto maksimal berukuran 2MB.',
+
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal 8 karakter.',
         ]);
 
         $identityCardPhotoPath = null;
@@ -109,14 +143,14 @@ class EmployeeController extends Controller
         $employee = User::create([
             'name' => $validated['name'],
             'member_number' => $validated['member_number'],
-            'identity_number' => $validated['nomor_induk_penduduk'],
+            'identity_number' => $validated['identity_number'],
             'birth_date' => $validated['birth_date'],
             'phone_number' => $validated['phone_number'],
             'address' => $validated['address'],
             'occupation' => $validated['occupation'],
             'identity_card_photo' => $identityCardPhotoPath,
             'self_photo' => $selfPhotoPath,
-            'work_area_id' => $validated['work_area_id'] ?? null,
+            'work_area_id' => null,
             'role' => 'employee',
             'is_verified' => true,
             'is_active' => true,
@@ -223,7 +257,7 @@ class EmployeeController extends Controller
         ]);
 
         $updateData = [];
-        
+
         if (isset($validated['name'])) {
             $updateData['name'] = $validated['name'];
         }
