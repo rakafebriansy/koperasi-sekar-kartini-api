@@ -94,14 +94,15 @@
                             "schema": {
                                 "required": [
                                     "name",
+                                    "member_number",
                                     "identity_number",
                                     "birth_date",
                                     "phone_number",
                                     "address",
                                     "occupation",
-                                    "password",
                                     "identity_card_photo",
                                     "self_photo",
+                                    "password",
                                     "work_area_id"
                                 ],
                                 "properties": {
@@ -109,7 +110,13 @@
                                         "type": "string",
                                         "example": "Budi Santoso"
                                     },
+                                    "member_number": {
+                                        "description": "Nomor anggota unik",
+                                        "type": "string",
+                                        "example": "MBR-001"
+                                    },
                                     "identity_number": {
+                                        "description": "NIK unik",
                                         "type": "string",
                                         "example": "3201010101900001"
                                     },
@@ -119,6 +126,7 @@
                                         "example": "1990-01-01"
                                     },
                                     "phone_number": {
+                                        "description": "Nomor telepon unik",
                                         "type": "string",
                                         "example": "081234567890"
                                     },

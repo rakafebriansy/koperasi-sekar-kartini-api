@@ -43,8 +43,10 @@ class MemberSeeder extends Seeder
 
         $rows = [];
 
+        $startNumber = 101;
+
         foreach ($memberData as $index => $data) {
-            $number = $index + 1;
+            $number = $startNumber + $index;
             $name = $data['name'];
             $groupNumber = $data['group'];
 
