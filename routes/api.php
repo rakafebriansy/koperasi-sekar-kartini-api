@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{id}', [WorkAreaController::class, 'destroy']);
     });
 
-    Route::prefix('employees')->middleware(['role:admin'])->group(function () {
+    Route::prefix('employees')->middleware(['role:admin,employee'])->group(function () {
         Route::get('/', [EmployeeController::class, 'index']);
         Route::post('/', [EmployeeController::class, 'store']);
         Route::get('{id}', [EmployeeController::class, 'show']);

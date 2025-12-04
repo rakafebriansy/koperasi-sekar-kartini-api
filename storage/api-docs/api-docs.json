@@ -280,11 +280,15 @@
                                 "required": [
                                     "name",
                                     "member_number",
-                                    "nomor_induk_penduduk",
+                                    "identity_number",
                                     "birth_date",
                                     "phone_number",
                                     "address",
-                                    "occupation"
+                                    "occupation",
+                                    "identity_card_photo",
+                                    "self_photo",
+                                    "password",
+                                    "work_area_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -292,10 +296,12 @@
                                         "example": "Siti Nurhaliza"
                                     },
                                     "member_number": {
+                                        "description": "Nomor anggota unik",
                                         "type": "string",
-                                        "example": "EMP001"
+                                        "example": "EMP-001"
                                     },
-                                    "nomor_induk_penduduk": {
+                                    "identity_number": {
+                                        "description": "NIK unik",
                                         "type": "string",
                                         "example": "3201010101900002"
                                     },
@@ -305,6 +311,7 @@
                                         "example": "1990-02-15"
                                     },
                                     "phone_number": {
+                                        "description": "Nomor telepon unik",
                                         "type": "string",
                                         "example": "081234567891"
                                     },
@@ -323,6 +330,10 @@
                                     "self_photo": {
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
                                     },
                                     "work_area_id": {
                                         "type": "integer",
@@ -402,6 +413,26 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Employee not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Employee not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -446,6 +477,26 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Employee not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Employee not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -481,10 +532,12 @@
                                         "example": "Siti Nurhaliza"
                                     },
                                     "member_number": {
+                                        "description": "Nomor anggota unik",
                                         "type": "string",
-                                        "example": "EMP001"
+                                        "example": "EMP-001"
                                     },
-                                    "nomor_induk_penduduk": {
+                                    "identity_number": {
+                                        "description": "NIK unik",
                                         "type": "string",
                                         "example": "3201010101900002"
                                     },
@@ -494,6 +547,7 @@
                                         "example": "1990-02-15"
                                     },
                                     "phone_number": {
+                                        "description": "Nomor telepon unik",
                                         "type": "string",
                                         "example": "081234567891"
                                     },
@@ -512,6 +566,10 @@
                                     "self_photo": {
                                         "type": "string",
                                         "format": "binary"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
                                     },
                                     "work_area_id": {
                                         "type": "integer",
@@ -540,6 +598,26 @@
                                         },
                                         "data": {
                                             "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Employee not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Employee not found."
                                         }
                                     },
                                     "type": "object"
