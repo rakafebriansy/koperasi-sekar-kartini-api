@@ -25,8 +25,8 @@ class AuthController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"phone_number","password"},
-     *             @OA\Property(property="phone_number", type="string", example="087712345678"),
-     *             @OA\Property(property="password", type="string", example="password")
+     *             @OA\Property(property="phone_number", type="string", example="081200000001"),
+     *             @OA\Property(property="password", type="string", example="admin123")
      *         )
      *     ),
      *     @OA\Response(
@@ -55,7 +55,7 @@ class AuthController extends Controller
         $user = User::where('phone_number', $credentials['phone_number'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return response()->json(['success' => false, 'message' => 'Invalid member number or password.'], 401);
+            return response()->json(['success' => false, 'message' => 'Invalid phone number or password.'], 401);
         }
 
         if (!$user->is_verified) {

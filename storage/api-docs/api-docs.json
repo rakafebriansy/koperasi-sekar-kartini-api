@@ -35,11 +35,11 @@
                                 "properties": {
                                     "phone_number": {
                                         "type": "string",
-                                        "example": "087712345678"
+                                        "example": "081200000001"
                                     },
                                     "password": {
                                         "type": "string",
-                                        "example": "password"
+                                        "example": "admin123"
                                     }
                                 },
                                 "type": "object"
@@ -547,694 +547,6 @@
                 ]
             }
         },
-        "/api/groups": {
-            "get": {
-                "tags": [
-                    "Member Groups"
-                ],
-                "summary": "Get all member groups",
-                "operationId": "e4b22f3a59cb6e2fa39c21c5ed6a37b1",
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/MemberGroup"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Member Groups"
-                ],
-                "summary": "Create new member group",
-                "operationId": "49ecf50e8f6d62cb92edcb297c93e6a9",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "number"
-                                ],
-                                "properties": {
-                                    "number": {
-                                        "type": "string",
-                                        "example": "GRP001"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Kelompok tani sejahtera"
-                                    },
-                                    "work_area_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Member group created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Member group created successfully."
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/MemberGroup"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/groups/{id}": {
-            "get": {
-                "tags": [
-                    "Member Groups"
-                ],
-                "summary": "Get member group by ID",
-                "operationId": "bb679239a1325b545c1e9167b899b042",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Success",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/MemberGroup"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Member Groups"
-                ],
-                "summary": "Delete member group",
-                "operationId": "0791790a0ea680ad70a271c32713673f",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Member group deleted successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Member group deleted successfully."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            },
-            "patch": {
-                "tags": [
-                    "Member Groups"
-                ],
-                "summary": "Update member group",
-                "operationId": "8ecb6f651c6b38aee27212a2e41d32a5",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "number": {
-                                        "type": "string",
-                                        "example": "GRP001"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Kelompok tani sejahtera"
-                                    },
-                                    "work_area_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Member group updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Member group updated successfully."
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/MemberGroup"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/groups/chairman/{id}": {
-            "patch": {
-                "tags": [
-                    "Member Groups"
-                ],
-                "summary": "Update chairman of member group",
-                "operationId": "a4f491793363d34a283726ee553a3bcb",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "chairman_id"
-                                ],
-                                "properties": {
-                                    "chairman_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Chairman updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Chairman updated successfully."
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/MemberGroup"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Chairman must be a group member"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/groups/facilitator/{id}": {
-            "patch": {
-                "tags": [
-                    "Member Groups"
-                ],
-                "summary": "Update facilitator of member group",
-                "operationId": "a055c3761dc041cdfbd91f6ee5f481f9",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "facilitator_id"
-                                ],
-                                "properties": {
-                                    "facilitator_id": {
-                                        "type": "integer",
-                                        "example": 2
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Facilitator updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Facilitator updated successfully."
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/MemberGroup"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Facilitator must be a group member"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/groups/treasurer/{id}": {
-            "patch": {
-                "tags": [
-                    "Member Groups"
-                ],
-                "summary": "Update treasurer of member group",
-                "operationId": "287d0180da2f2090f8a533744fd450e3",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "treasurer_id"
-                                ],
-                                "properties": {
-                                    "treasurer_id": {
-                                        "type": "integer",
-                                        "example": 3
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Treasurer updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Treasurer updated successfully."
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/MemberGroup"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Treasurer must be a group member"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/verified/{id}": {
-            "put": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Update user verification status",
-                "operationId": "e588e310c37d13216945e07ce5287eac",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "is_verified"
-                                ],
-                                "properties": {
-                                    "is_verified": {
-                                        "type": "boolean",
-                                        "example": true
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "User verification status updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "User verification status updated successfully."
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Cannot update admin user status"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/active/{id}": {
-            "put": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Update user active status",
-                "operationId": "dde36d1f25bf4d930ddf6344ef7bd64d",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "is_active"
-                                ],
-                                "properties": {
-                                    "is_active": {
-                                        "type": "boolean",
-                                        "example": true
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "User active status updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "User active status updated successfully."
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Cannot update admin user status"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/users/{id}/group": {
-            "patch": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Update user group assignment",
-                "operationId": "a69be5258f680ca01d9b03bb44b8a9bd",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "group_id"
-                                ],
-                                "properties": {
-                                    "group_id": {
-                                        "type": "integer",
-                                        "example": 1
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "User group updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "User group updated successfully."
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/User"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Only group members can be assigned to a group"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
         "/api/work-areas": {
             "get": {
                 "tags": [
@@ -1484,111 +796,7 @@
     },
     "components": {
         "schemas": {
-            "User": {
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "name": {
-                        "type": "string",
-                        "example": "Budi Santoso"
-                    },
-                    "member_number": {
-                        "type": "string",
-                        "example": "MEM001"
-                    },
-                    "identity_number": {
-                        "type": "string",
-                        "example": "3201010101900001"
-                    },
-                    "birth_date": {
-                        "type": "string",
-                        "format": "date",
-                        "example": "1990-01-01"
-                    },
-                    "phone_number": {
-                        "type": "string",
-                        "example": "081234567890"
-                    },
-                    "address": {
-                        "type": "string",
-                        "example": "Jl. Raya No. 123"
-                    },
-                    "occupation": {
-                        "type": "string",
-                        "example": "Petani"
-                    },
-                    "identity_card_photo": {
-                        "type": "string",
-                        "example": "employees/identity_cards/photo.jpg",
-                        "nullable": true
-                    },
-                    "self_photo": {
-                        "type": "string",
-                        "example": "employees/photos/photo.jpg",
-                        "nullable": true
-                    },
-                    "role": {
-                        "type": "string",
-                        "enum": [
-                            "group_member",
-                            "employee",
-                            "admin"
-                        ],
-                        "example": "group_member"
-                    },
-                    "is_verified": {
-                        "type": "boolean",
-                        "example": false
-                    },
-                    "is_active": {
-                        "type": "boolean",
-                        "example": false
-                    },
-                    "work_area_id": {
-                        "type": "integer",
-                        "example": 1,
-                        "nullable": true
-                    },
-                    "group_id": {
-                        "type": "integer",
-                        "example": 1,
-                        "nullable": true
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                },
-                "type": "object"
-            },
-            "WorkArea": {
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "name_work_area": {
-                        "type": "string",
-                        "example": "Wilayah Kerja A"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                },
-                "type": "object"
-            },
-            "MemberGroup": {
+            "Group": {
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -1661,6 +869,74 @@
                     }
                 },
                 "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Rahmat Admin"
+                    },
+                    "phone_number": {
+                        "type": "string",
+                        "example": "081200000001"
+                    },
+                    "member_number": {
+                        "type": "string",
+                        "example": "ADM-001"
+                    },
+                    "identity_number": {
+                        "type": "string",
+                        "example": "3201111111110001"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Jl. Anggur No. 10, Sumbersari, Jember"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "admin"
+                    },
+                    "is_verified": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "work_area": {
+                        "$ref": "#/components/schemas/WorkArea"
+                    },
+                    "group": {
+                        "$ref": "#/components/schemas/Group"
+                    }
+                },
+                "type": "object"
+            },
+            "WorkArea": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name_work_area": {
+                        "type": "string",
+                        "example": "Wilayah Kerja A"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -1680,14 +956,6 @@
         {
             "name": "Employees",
             "description": "Employee management endpoints"
-        },
-        {
-            "name": "Member Groups",
-            "description": "Member group management endpoints"
-        },
-        {
-            "name": "Users",
-            "description": "User management endpoints"
         },
         {
             "name": "Work Areas",
