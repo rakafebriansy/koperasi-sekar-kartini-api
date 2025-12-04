@@ -11,6 +11,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'registerGroupMember']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('refresh', [AuthController::class, 'refreshToken']);
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::prefix('work-areas')->middleware(['role:admin'])->group(function () {
@@ -25,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [EmployeeController::class, 'index']);
         Route::post('/', [EmployeeController::class, 'store']);
         Route::get('{id}', [EmployeeController::class, 'show']);
-        Route::patch('{id}', [EmployeeController::class, 'update']);
+        Route::put('{id}', [EmployeeController::class, 'update']);
         Route::delete('{id}', [EmployeeController::class, 'destroy']);
     });
 

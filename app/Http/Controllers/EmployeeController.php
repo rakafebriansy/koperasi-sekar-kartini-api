@@ -16,6 +16,39 @@ use Illuminate\Support\Facades\Storage;
  */
 class EmployeeController extends Controller
 {
+    private $errorMessage = [
+        'name.required' => 'Nama wajib diisi.',
+        'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+
+        'identity_number.required' => 'NIK wajib diisi.',
+        'identity_number.unique' => 'NIK sudah terdaftar.',
+
+        'member_number.required' => 'Nomor Anggota wajib diisi.',
+        'member_number.unique' => 'Nomor Anggota sudah terdaftar.',
+
+        'birth_date.required' => 'Tanggal lahir wajib diisi.',
+        'birth_date.date' => 'Format tanggal lahir tidak valid.',
+
+        'phone_number.required' => 'Nomor telepon wajib diisi.',
+
+        'address.required' => 'Alamat wajib diisi.',
+
+        'occupation.required' => 'Pekerjaan wajib diisi.',
+
+        'identity_card_photo.required' => 'Foto KTP wajib diunggah.',
+        'identity_card_photo.image' => 'File foto KTP harus berupa gambar.',
+        'identity_card_photo.mimes' => 'Foto KTP harus berformat JPG, JPEG, atau PNG.',
+        'identity_card_photo.max' => 'Foto KTP maksimal berukuran 2MB.',
+
+        'self_photo.required' => 'Pas Foto wajib diunggah.',
+        'self_photo.image' => 'File Pas Foto harus berupa gambar.',
+        'self_photo.mimes' => 'Pas Foto harus berformat JPG, JPEG, atau PNG.',
+        'self_photo.max' => 'Pas Foto maksimal berukuran 2MB.',
+
+        'password.required' => 'Password wajib diisi.',
+        'password.min' => 'Password minimal 8 karakter.',
+    ];
+
     /**
      * @OA\Get(
      *     path="/api/employees",
@@ -69,7 +102,6 @@ class EmployeeController extends Controller
      *                 @OA\Property(property="occupation", type="string", example="Karyawan"),
      *                 @OA\Property(property="identity_card_photo", type="string", format="binary"),
      *                 @OA\Property(property="self_photo", type="string", format="binary"),
-     *                 @OA\Property(property="work_area_id", type="integer", example=1)
      *             )
      *         )
      *     ),
@@ -96,38 +128,7 @@ class EmployeeController extends Controller
             'occupation' => ['required', 'string'],
             'identity_card_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'self_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-        ], [
-            'name.required' => 'Nama wajib diisi.',
-            'name.max' => 'Nama tidak boleh lebih dari 255 karakter.',
-
-            'identity_number.required' => 'NIK wajib diisi.',
-            'identity_number.unique' => 'NIK sudah terdaftar.',
-
-            'member_number.required' => 'Nomor Anggota wajib diisi.',
-            'member_number.unique' => 'Nomor Anggota sudah terdaftar.',
-
-            'birth_date.required' => 'Tanggal lahir wajib diisi.',
-            'birth_date.date' => 'Format tanggal lahir tidak valid.',
-
-            'phone_number.required' => 'Nomor telepon wajib diisi.',
-
-            'address.required' => 'Alamat wajib diisi.',
-
-            'occupation.required' => 'Pekerjaan wajib diisi.',
-
-            'identity_card_photo.required' => 'Foto KTP wajib diunggah.',
-            'identity_card_photo.image' => 'File foto KTP harus berupa gambar.',
-            'identity_card_photo.mimes' => 'Foto KTP harus berformat JPG, JPEG, atau PNG.',
-            'identity_card_photo.max' => 'Foto KTP maksimal berukuran 2MB.',
-
-            'self_photo.required' => 'Pas Foto wajib diunggah.',
-            'self_photo.image' => 'File Pas Foto harus berupa gambar.',
-            'self_photo.mimes' => 'Pas Foto harus berformat JPG, JPEG, atau PNG.',
-            'self_photo.max' => 'Pas Foto maksimal berukuran 2MB.',
-
-            'password.required' => 'Password wajib diisi.',
-            'password.min' => 'Password minimal 8 karakter.',
-        ]);
+        ], $this->errorMessage);
 
         $identityCardPhotoPath = null;
         $selfPhotoPath = null;
@@ -224,7 +225,6 @@ class EmployeeController extends Controller
      *                 @OA\Property(property="occupation", type="string", example="Karyawan"),
      *                 @OA\Property(property="identity_card_photo", type="string", format="binary"),
      *                 @OA\Property(property="self_photo", type="string", format="binary"),
-     *                 @OA\Property(property="work_area_id", type="integer", example=1)
      *             )
      *         )
      *     ),
@@ -244,44 +244,19 @@ class EmployeeController extends Controller
         $employee = User::where('role', 'employee')->findOrFail($id);
 
         $validated = $request->validate([
-            'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'member_number' => ['sometimes', 'required', 'string', 'unique:users,member_number,' . $employee->id],
-            'nomor_induk_penduduk' => ['sometimes', 'required', 'string', 'unique:users,identity_number,' . $employee->id],
-            'birth_date' => ['sometimes', 'required', 'date'],
-            'phone_number' => ['sometimes', 'required', 'string'],
-            'address' => ['sometimes', 'required', 'string'],
-            'occupation' => ['sometimes', 'required', 'string'],
+            'name' => ['required', 'string', 'max:255'],
+            'member_number' => ['required', 'string', 'unique:users,member_number,' . $employee->id],
+            'identity_number' => ['required', 'string', 'unique:users,identity_number,' . $employee->id],
+            'birth_date' => ['required', 'date'],
+            'phone_number' => ['required', 'string'],
+            'address' => ['required', 'string'],
+            'occupation' => ['required', 'string'],
             'identity_card_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'self_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
-            'work_area_id' => ['nullable', 'exists:work_areas,id'],
-        ]);
+        ], $this->errorMessage);
 
-        $updateData = [];
 
-        if (isset($validated['name'])) {
-            $updateData['name'] = $validated['name'];
-        }
-        if (isset($validated['member_number'])) {
-            $updateData['member_number'] = $validated['member_number'];
-        }
-        if (isset($validated['nomor_induk_penduduk'])) {
-            $updateData['identity_number'] = $validated['nomor_induk_penduduk'];
-        }
-        if (isset($validated['birth_date'])) {
-            $updateData['birth_date'] = $validated['birth_date'];
-        }
-        if (isset($validated['phone_number'])) {
-            $updateData['phone_number'] = $validated['phone_number'];
-        }
-        if (isset($validated['address'])) {
-            $updateData['address'] = $validated['address'];
-        }
-        if (isset($validated['occupation'])) {
-            $updateData['occupation'] = $validated['occupation'];
-        }
-        if (isset($validated['work_area_id'])) {
-            $updateData['work_area_id'] = $validated['work_area_id'];
-        }
+        $updateData = $validated;
 
         if ($request->hasFile('identity_card_photo')) {
             if ($employee->identity_card_photo) {

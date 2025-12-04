@@ -127,7 +127,7 @@ class AuthController extends Controller
 
             'identity_number.required' => 'NIK wajib diisi.',
             'identity_number.unique' => 'NIK sudah terdaftar.',
-            
+
             // 'member_number.required' => 'Nomor Anggota wajib diisi.',
             // 'member_number.unique' => 'Nomor Anggota sudah terdaftar.',
 
@@ -215,9 +215,33 @@ class AuthController extends Controller
 
         if ($user && $user->currentAccessToken()) {
             $user->currentAccessToken()->delete();
+            return response()->json(['success' => true, 'message' => 'Logged out successfully.']);
+        }
+        return response()->json(['success' => false, 'message' => 'Log out failed.']);
+
+    }
+
+    public function refreshToken(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized.'
+            ], 401);
         }
 
-        return response()->json(['success' => true, 'message' => 'Logged out successfully.']);
+        $request->user()->currentAccessToken()->delete();
+
+        $newToken = $user->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'success' => true,
+            'token' => $newToken,
+            'data' => new UserResource($user)
+        ]);
     }
+
 }
 
