@@ -22,11 +22,14 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             WorkAreaSeeder::class,
-            AdminSeeder::class,
-        ]);
-        $this->call([
             MemberGroupSeeder::class,
-            UserSeeder::class,
+            AdminSeeder::class,
+            EmployeeSeeder::class,
+            MemberSeeder::class,
+            MeetingSeeder::class,
+            UsersMeetingsSeeder::class,
+            SavingsSeeder::class,
+            LoansSeeder::class,
         ]);
     }
 }
