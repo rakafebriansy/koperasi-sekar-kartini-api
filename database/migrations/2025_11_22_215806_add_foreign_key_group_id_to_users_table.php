@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreign('group_id')->references('id')->on('member_groups')->onDelete('set null');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
         });
     }
 

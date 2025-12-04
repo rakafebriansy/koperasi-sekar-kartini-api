@@ -13,20 +13,16 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id()->primary();
             $table->string('name');
-            $table->string('member_number')->unique()->nullable();
+            $table->string('member_number')->unique();
             $table->string('identity_number')->unique();
             $table->date('birth_date');
             $table->string('phone_number')->unique();
             $table->string('address');
             $table->string('occupation');
-            $table->string('identity_card_photo')->nullable();
-            $table->string('self_photo')->nullable();
+            $table->string('identity_card_photo');
+            $table->string('self_photo');
             $table->string('password');
-            $table->enum('role', [
-                'group_member',
-                'employee',
-                'admin'
-            ]);
+            $table->enum('role', ['group_member', 'employee', 'admin']);
             $table->boolean('is_verified')->default(false);
             $table->boolean('is_active')->default(false);
             $table->unsignedBigInteger('work_area_id')->nullable();

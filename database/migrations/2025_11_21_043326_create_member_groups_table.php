@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('member_groups', function (Blueprint $table) {
+        Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->string('number');
-            $table->longText('description')->nullable();
+            $table->string('name');
+            $table->string('number')->unique();
+            $table->longText('description');
             $table->integer('shared_liability_fund_amount')->default(0);
             $table->integer('group_fund_amount')->default(0);
             $table->integer('social_fund_amount')->default(0);

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->time('time');
             $table->string('location');
             $table->string('photo');
-            $table->text('description');
+            $table->longText('description');
             $table->unsignedBigInteger('group_id')->nullable();
-            $table->foreign('group_id')->references('id')->on('member_groups')->onDelete('set null');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
             $table->timestamps();
         });
     }

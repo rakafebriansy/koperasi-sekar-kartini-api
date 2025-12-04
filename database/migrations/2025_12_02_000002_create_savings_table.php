@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('savings', function (Blueprint $table) {
             $table->id()->primary();
-            $table->enum('saving_type', ['principal', 'mandatory']);
+            $table->enum('saving_type', ['shared_liability', 'group', 'social']);
             $table->unsignedBigInteger('group_id')->nullable();
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
             $table->unsignedBigInteger('user_id')->nullable();
-
-            $table->foreign('group_id')->references('id')->on('member_groups')->onDelete('set null');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 
             $table->timestamps();

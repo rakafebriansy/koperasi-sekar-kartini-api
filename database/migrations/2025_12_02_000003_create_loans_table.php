@@ -16,10 +16,9 @@ return new class extends Migration
             $table->enum('loan_type', ['type_a', 'type_b']);
             $table->enum('status', ['approved', 'in_process', 'rejected'])->default('in_process');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('group_id')->nullable();
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('group_id')->references('id')->on('member_groups')->onDelete('set null');
+            $table->unsignedBigInteger('group_id')->nullable();
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
 
             $table->timestamps();
         });
