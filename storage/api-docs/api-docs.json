@@ -709,12 +709,18 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Work area created successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/WorkArea"
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "description": "Validation error"
                     }
                 },
                 "security": [
@@ -754,6 +760,26 @@
                                         },
                                         "data": {
                                             "$ref": "#/components/schemas/WorkArea"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Work area not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Work area not found."
                                         }
                                     },
                                     "type": "object"
@@ -805,8 +831,57 @@
                             }
                         }
                     },
+                    "404": {
+                        "description": "Work area not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Work area not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
                     "422": {
-                        "description": "Work area cannot be deleted because it is still referenced"
+                        "description": "Work area cannot be deleted because it is still referenced",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Wilayah kerja tidak dapat dihapus karena masih digunakan."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "work_area": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "Wilayah kerja ini masih digunakan oleh: 5 pengguna dan 2 kelompok anggota."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -864,12 +939,38 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Work area updated successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/WorkArea"
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Work area not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Work area not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
                     }
                 },
                 "security": [
