@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->string('occupation');
             $table->string('identity_card_photo')->nullable();
             $table->string('self_photo')->nullable();
+            $table->string('member_card_photo')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', [

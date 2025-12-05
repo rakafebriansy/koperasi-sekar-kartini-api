@@ -25,6 +25,7 @@ class User extends Authenticatable
         'phone_number',
         'address',
         'occupation',
+        'member_card_photo',
         'identity_card_photo',
         'self_photo',
         'password',

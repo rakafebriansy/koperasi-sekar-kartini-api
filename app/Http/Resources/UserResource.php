@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'occupation' => $this->occupation,
             'identity_card_photo' => $this->identity_card_photo,
             'self_photo' => $this->self_photo,
+            'member_card_photo' => $this->member_card_photo,
             'email_verified_at' => $this->email_verified_at,
             'role' => $this->role,
             'is_verified' => $this->is_verified,

@@ -126,6 +126,7 @@ class EmployeeController extends Controller
             'phone_number' => ['required', 'string'],
             'address' => ['required', 'string'],
             'occupation' => ['required', 'string'],
+            'password' => ['required', 'string'],
             'identity_card_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'self_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ], $this->errorMessage);
@@ -141,6 +142,10 @@ class EmployeeController extends Controller
             $selfPhotoPath = $request->file('self_photo')->store('employees/photos', 'public');
         }
 
+        if ($request->hasFile('member_card_photo')) {
+            $memberCardPhotoPath = $request->file('member_card_photo')->store('employees/photos', 'public');
+        }
+
         $employee = User::create([
             'name' => $validated['name'],
             'member_number' => $validated['member_number'],
@@ -151,17 +156,18 @@ class EmployeeController extends Controller
             'occupation' => $validated['occupation'],
             'identity_card_photo' => $identityCardPhotoPath,
             'self_photo' => $selfPhotoPath,
+            'member_card_photo' => $memberCardPhotoPath,
             'work_area_id' => null,
             'role' => 'employee',
             'is_verified' => true,
             'is_active' => true,
-            'password' => Hash::make('employee123'),
+            'password' => Hash::make($validated['password']),
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Employee created successfully.',
-            'data' => $employee,
+            'data' => new UserResource($employee),
         ], 201);
     }
 
@@ -251,8 +257,10 @@ class EmployeeController extends Controller
             'phone_number' => ['required', 'string'],
             'address' => ['required', 'string'],
             'occupation' => ['required', 'string'],
+            'password' => ['nullable', 'string'],
             'identity_card_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'self_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'member_card_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ], $this->errorMessage);
 
 
@@ -272,12 +280,19 @@ class EmployeeController extends Controller
             $updateData['self_photo'] = $request->file('self_photo')->store('employees/photos', 'public');
         }
 
+        if ($request->hasFile('member_card_photo')) {
+            if ($employee->member_card_photo) {
+                Storage::disk('public')->delete($employee->member_card_photo);
+            }
+            $updateData['member_card_photo'] = $request->file('member_card_photo')->store('employees/photos', 'public');
+        }
+
         $employee->update($updateData);
 
         return response()->json([
             'success' => true,
             'message' => 'Employee updated successfully.',
-            'data' => $employee->fresh('workArea'),
+            'data' => new UserResource($employee),
         ]);
     }
 

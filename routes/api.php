@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\MemberGroupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkAreaController;
@@ -9,6 +10,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'registerGroupMember']);
+
+Route::get('/file/{path}', [FileController::class, 'show'])
+    ->where('path', '.*');
+
+Route::get('/download/{path}', [FileController::class, 'download'])
+    ->where('path', '.*')
+    ->name('download.file');
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('refresh', [AuthController::class, 'refreshToken']);
@@ -22,8 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{id}', [WorkAreaController::class, 'destroy']);
     });
 
+    Route::get('/employees', [EmployeeController::class, 'index']);
     Route::prefix('employees')->middleware(['role:admin'])->group(function () {
-        Route::get('/', [EmployeeController::class, 'index']);
         Route::post('/', [EmployeeController::class, 'store']);
         Route::get('{id}', [EmployeeController::class, 'show']);
         Route::put('{id}', [EmployeeController::class, 'update']);
