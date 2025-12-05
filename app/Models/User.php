@@ -71,4 +71,21 @@ class User extends Authenticatable
     {
         return $this->belongsTo(MemberGroup::class, 'group_id');
     }
+
+    public function meetings()
+    {
+        return $this->belongsToMany(Meeting::class, 'users_meetings')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
+    public function savings()
+    {
+        return $this->hasMany(Saving::class);
+    }
+
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
 }

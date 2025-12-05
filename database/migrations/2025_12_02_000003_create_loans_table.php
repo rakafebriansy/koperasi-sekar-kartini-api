@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meetings', function (Blueprint $table) {
+        Schema::create('loans', function (Blueprint $table) {
             $table->id()->primary();
-            $table->enum('meeting_type', ['Activity', 'Routine Meeting']);
-            $table->date('date');
-            $table->time('time');
-            $table->string('location');
-            $table->string('photo');
-            $table->longText('description');
+            $table->enum('loan_type', ['type_a', 'type_b']);
+            $table->enum('status', ['approved', 'in_process', 'rejected'])->default('in_process');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->unsignedBigInteger('group_id')->nullable();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
+
             $table->timestamps();
         });
     }
@@ -30,7 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meetings');
+        Schema::dropIfExists('loans');
     }
 };
 

@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meetings', function (Blueprint $table) {
+        Schema::create('savings', function (Blueprint $table) {
             $table->id()->primary();
-            $table->enum('meeting_type', ['Activity', 'Routine Meeting']);
-            $table->date('date');
-            $table->time('time');
-            $table->string('location');
-            $table->string('photo');
-            $table->longText('description');
+            $table->enum('saving_type', ['shared_liability', 'group', 'social']);
             $table->unsignedBigInteger('group_id')->nullable();
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+
             $table->timestamps();
         });
     }
@@ -30,7 +28,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meetings');
+        Schema::dropIfExists('savings');
     }
 };
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WorkAreaResource;
 use App\Models\MemberGroup;
 use App\Models\User;
 use App\Models\WorkArea;
@@ -39,7 +40,7 @@ class WorkAreaController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $workAreas,
+            'data' => WorkAreaResource::collection($workAreas),
         ]);
     }
 
@@ -61,22 +62,30 @@ class WorkAreaController extends Controller
      *         description="Work area created successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Work area created successfully.")
+     *             @OA\Property(property="message", type="string", example="Work area created successfully."),
+     *             @OA\Property(property="data", ref="#/components/schemas/WorkArea")
      *         )
-     *     )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error")
      * )
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name_work_area' => ['required', 'string', 'max:255', 'unique:work_areas,name_work_area'],
+        ], [
+            'name_work_area.required' => 'Nama wilayah kerja wajib diisi.',
+            'name_work_area.string' => 'Nama wilayah kerja harus berupa teks.',
+            'name_work_area.max' => 'Nama wilayah kerja tidak boleh lebih dari 255 karakter.',
+            'name_work_area.unique' => 'Nama wilayah kerja sudah terdaftar.',
         ]);
 
         $workArea = WorkArea::create($validated);
 
         return response()->json([
             'success' => true,
-            'message' => 'Work area created successfully.'
+            'message' => 'Work area created successfully.',
+            'data' => new WorkAreaResource($workArea),
         ], 201);
     }
 
@@ -99,16 +108,31 @@ class WorkAreaController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="data", ref="#/components/schemas/WorkArea")
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Work area not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Work area not found.")
+     *         )
      *     )
      * )
      */
     public function show(string $id)
     {
-        $workArea = WorkArea::findOrFail($id);
+        $workArea = WorkArea::find($id);
+
+        if (!$workArea) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Work area not found.'
+            ], 404);
+        }
 
         return response()->json([
             'success' => true,
-            'data' => $workArea,
+            'data' => new WorkAreaResource($workArea),
         ]);
     }
 
@@ -136,24 +160,47 @@ class WorkAreaController extends Controller
      *         description="Work area updated successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Work area updated successfully.")
+     *             @OA\Property(property="message", type="string", example="Work area updated successfully."),
+     *             @OA\Property(property="data", ref="#/components/schemas/WorkArea")
      *         )
-     *     )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Work area not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Work area not found.")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation error")
      * )
      */
     public function update(Request $request, string $id)
     {
-        $workArea = WorkArea::findOrFail($id);
+        $workArea = WorkArea::find($id);
+
+        if (!$workArea) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Work area not found.'
+            ], 404);
+        }
 
         $validated = $request->validate([
             'name_work_area' => ['required', 'string', 'max:255', 'unique:work_areas,name_work_area,'.$workArea->id],
+        ], [
+            'name_work_area.required' => 'Nama wilayah kerja wajib diisi.',
+            'name_work_area.string' => 'Nama wilayah kerja harus berupa teks.',
+            'name_work_area.max' => 'Nama wilayah kerja tidak boleh lebih dari 255 karakter.',
+            'name_work_area.unique' => 'Nama wilayah kerja sudah terdaftar.',
         ]);
 
         $workArea->update($validated);
 
         return response()->json([
             'success' => true,
-            'message' => 'Work area updated successfully.'
+            'message' => 'Work area updated successfully.',
+            'data' => new WorkAreaResource($workArea->fresh()),
         ]);
     }
 
@@ -177,29 +224,76 @@ class WorkAreaController extends Controller
      *             @OA\Property(property="message", type="string", example="Work area deleted successfully.")
      *         )
      *     ),
-     *     @OA\Response(response=422, description="Work area cannot be deleted because it is still referenced")
+     *     @OA\Response(
+     *         response=404,
+     *         description="Work area not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Work area not found.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Work area cannot be deleted because it is still referenced",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Wilayah kerja tidak dapat dihapus karena masih digunakan."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="work_area",
+     *                     type="array",
+     *                     @OA\Items(type="string", example="Wilayah kerja ini masih digunakan oleh: 5 pengguna dan 2 kelompok anggota.")
+     *                 )
+     *             )
+     *         )
+     *     )
      * )
      */
     public function destroy(string $id)
     {
         $workArea = WorkArea::find($id);
 
-        try {
-            $workArea->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Work area deleted successfully.',
-            ], 200);
-        } catch (QueryException $e) {
+        if (!$workArea) {
             return response()->json([
                 'success' => false,
-                'message' => 'This work area cannot be deleted because it is still referenced by other data.',
+                'message' => 'Work area not found.'
+            ], 404);
+        }
+
+        // Cek apakah work area masih digunakan di users
+        $usersCount = User::where('work_area_id', $workArea->id)->count();
+        
+        // Cek apakah work area masih digunakan di member groups
+        $memberGroupsCount = MemberGroup::where('work_area_id', $workArea->id)->count();
+
+        if ($usersCount > 0 || $memberGroupsCount > 0) {
+            $usedIn = [];
+            if ($usersCount > 0) {
+                $usedIn[] = "{$usersCount} pengguna";
+            }
+            if ($memberGroupsCount > 0) {
+                $usedIn[] = "{$memberGroupsCount} kelompok anggota";
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Wilayah kerja tidak dapat dihapus karena masih digunakan.',
                 'errors' => [
-                    'work_area' => ['This work area has related records and cannot be deleted.']
+                    'work_area' => [
+                        'Wilayah kerja ini masih digunakan oleh: ' . implode(' dan ', $usedIn) . '.'
+                    ]
                 ],
             ], 422);
         }
+
+        $workArea->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Work area deleted successfully.',
+        ], 200);
     }
 }
 

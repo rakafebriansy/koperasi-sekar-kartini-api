@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -78,6 +79,7 @@ class EmployeeController extends Controller
         return response()->json([
             'success' => true,
             'data' => UserResource::collection($employees),
+            'data' => UserResource::collection($employees),
         ]);
     }
 
@@ -92,12 +94,24 @@ class EmployeeController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name","member_number","nomor_induk_penduduk","birth_date","phone_number","address","occupation"},
+     *                 required={
+     *                     "name",
+     *                     "member_number",
+     *                     "identity_number",
+     *                     "birth_date",
+     *                     "phone_number",
+     *                     "address",
+     *                     "occupation",
+     *                     "identity_card_photo",
+     *                     "self_photo",
+     *                     "password",
+     *                     "work_area_id"
+     *                 },
      *                 @OA\Property(property="name", type="string", example="Siti Nurhaliza"),
-     *                 @OA\Property(property="member_number", type="string", example="EMP001"),
-     *                 @OA\Property(property="nomor_induk_penduduk", type="string", example="3201010101900002"),
+     *                 @OA\Property(property="member_number", type="string", example="EMP-001", description="Nomor anggota unik"),
+     *                 @OA\Property(property="identity_number", type="string", example="3201010101900002", description="NIK unik"),
      *                 @OA\Property(property="birth_date", type="string", format="date", example="1990-02-15"),
-     *                 @OA\Property(property="phone_number", type="string", example="081234567891"),
+     *                 @OA\Property(property="phone_number", type="string", example="081234567891", description="Nomor telepon unik"),
      *                 @OA\Property(property="address", type="string", example="Jl. Merdeka No. 456"),
      *                 @OA\Property(property="occupation", type="string", example="Karyawan"),
      *                 @OA\Property(property="identity_card_photo", type="string", format="binary"),
@@ -122,8 +136,9 @@ class EmployeeController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'member_number' => ['required', 'string', 'unique:users,member_number'],
             'identity_number' => ['required', 'string', 'unique:users,identity_number'],
+            'identity_number' => ['required', 'string', 'unique:users,identity_number'],
             'birth_date' => ['required', 'date'],
-            'phone_number' => ['required', 'string'],
+            'phone_number' => ['required', 'string', 'unique:users,phone_number'],
             'address' => ['required', 'string'],
             'occupation' => ['required', 'string'],
             'password' => ['required', 'string'],
@@ -150,6 +165,7 @@ class EmployeeController extends Controller
             'name' => $validated['name'],
             'member_number' => $validated['member_number'],
             'identity_number' => $validated['identity_number'],
+            'identity_number' => $validated['identity_number'],
             'birth_date' => $validated['birth_date'],
             'phone_number' => $validated['phone_number'],
             'address' => $validated['address'],
@@ -159,7 +175,7 @@ class EmployeeController extends Controller
             'member_card_photo' => $memberCardPhotoPath,
             'work_area_id' => null,
             'role' => 'employee',
-            'is_verified' => true,
+            'is_verified' => false,
             'is_active' => true,
             'password' => Hash::make($validated['password']),
         ]);
@@ -190,18 +206,38 @@ class EmployeeController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="data", ref="#/components/schemas/User")
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Employee not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Employee not found.")
+     *         )
      *     )
      * )
      */
     public function show(string $id)
     {
-        $employee = User::where('role', 'employee')
-            ->with('workArea')
-            ->findOrFail($id);
+        $employee = User::with('workArea')->find($id);
+
+        if (!$employee) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Employee not found.'
+            ], 404);
+        }
+
+        if ($employee->role !== 'employee') {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not an employee.'
+            ], 404);
+        }
 
         return response()->json([
             'success' => true,
-            'data' => $employee,
+            'data' => new UserResource($employee),
         ]);
     }
 
@@ -223,10 +259,10 @@ class EmployeeController extends Controller
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 @OA\Property(property="name", type="string", example="Siti Nurhaliza"),
-     *                 @OA\Property(property="member_number", type="string", example="EMP001"),
-     *                 @OA\Property(property="nomor_induk_penduduk", type="string", example="3201010101900002"),
+     *                 @OA\Property(property="member_number", type="string", example="EMP-001", description="Nomor anggota unik"),
+     *                 @OA\Property(property="identity_number", type="string", example="3201010101900002", description="NIK unik"),
      *                 @OA\Property(property="birth_date", type="string", format="date", example="1990-02-15"),
-     *                 @OA\Property(property="phone_number", type="string", example="081234567891"),
+     *                 @OA\Property(property="phone_number", type="string", example="081234567891", description="Nomor telepon unik"),
      *                 @OA\Property(property="address", type="string", example="Jl. Merdeka No. 456"),
      *                 @OA\Property(property="occupation", type="string", example="Karyawan"),
      *                 @OA\Property(property="identity_card_photo", type="string", format="binary"),
@@ -242,12 +278,34 @@ class EmployeeController extends Controller
      *             @OA\Property(property="message", type="string", example="Employee updated successfully."),
      *             @OA\Property(property="data", ref="#/components/schemas/User")
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Employee not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Employee not found.")
+     *         )
      *     )
      * )
      */
     public function update(Request $request, string $id)
     {
-        $employee = User::where('role', 'employee')->findOrFail($id);
+        $employee = User::find($id);
+
+        if (!$employee) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Employee not found.'
+            ], 404);
+        }
+
+        if ($employee->role !== 'employee') {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not an employee.'
+            ], 404);
+        }
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -315,12 +373,34 @@ class EmployeeController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Employee deleted successfully.")
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Employee not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Employee not found.")
+     *         )
      *     )
      * )
      */
     public function destroy(string $id)
     {
-        $employee = User::where('role', 'employee')->findOrFail($id);
+        $employee = User::find($id);
+
+        if (!$employee) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Employee not found.'
+            ], 404);
+        }
+
+        if ($employee->role !== 'employee') {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not an employee.'
+            ], 404);
+        }
 
         if ($employee->identity_card_photo) {
             Storage::disk('public')->delete($employee->identity_card_photo);

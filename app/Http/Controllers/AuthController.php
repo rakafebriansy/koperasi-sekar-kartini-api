@@ -25,8 +25,8 @@ class AuthController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"phone_number","password"},
-     *             @OA\Property(property="phone_number", type="string", example="087712345678"),
-     *             @OA\Property(property="password", type="string", example="password")
+     *             @OA\Property(property="phone_number", type="string", example="081200000001"),
+     *             @OA\Property(property="password", type="string", example="admin123")
      *         )
      *     ),
      *     @OA\Response(
@@ -55,7 +55,7 @@ class AuthController extends Controller
         $user = User::where('phone_number', $credentials['phone_number'])->first();
 
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return response()->json(['success' => false, 'message' => 'Invalid member number or password.'], 401);
+            return response()->json(['success' => false, 'message' => 'Invalid phone number or password.'], 401);
         }
 
         if (!$user->is_verified) {
@@ -81,11 +81,24 @@ class AuthController extends Controller
      *         @OA\MediaType(
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
-     *                 required={"name","identity_number","birth_date","phone_number","address","occupation","password","identity_card_photo","self_photo","work_area_id"},
+     *                 required={
+     *                     "name",
+     *                     "member_number",
+     *                     "identity_number",
+     *                     "birth_date",
+     *                     "phone_number",
+     *                     "address",
+     *                     "occupation",
+     *                     "identity_card_photo",
+     *                     "self_photo",
+     *                     "password",
+     *                     "work_area_id"
+     *                 },
      *                 @OA\Property(property="name", type="string", example="Budi Santoso"),
-     *                 @OA\Property(property="identity_number", type="string", example="3201010101900001"),
+     *                 @OA\Property(property="member_number", type="string", example="MBR-001", description="Nomor anggota unik"),
+     *                 @OA\Property(property="identity_number", type="string", example="3201010101900001", description="NIK unik"),
      *                 @OA\Property(property="birth_date", type="string", format="date", example="1990-01-01"),
-     *                 @OA\Property(property="phone_number", type="string", example="081234567890"),
+     *                 @OA\Property(property="phone_number", type="string", example="081234567890", description="Nomor telepon unik"),
      *                 @OA\Property(property="address", type="string", example="Jl. Raya No. 123"),
      *                 @OA\Property(property="occupation", type="string", example="Petani"),
      *                 @OA\Property(property="identity_card_photo", type="string", format="binary"),
@@ -114,7 +127,7 @@ class AuthController extends Controller
             // 'member_number' => ['required', 'string', 'unique:users,identity_number'],
             'identity_number' => ['required', 'string', 'unique:users,identity_number'],
             'birth_date' => ['required', 'date'],
-            'phone_number' => ['required', 'string'],
+            'phone_number' => ['required', 'string', 'unique:users,phone_number'],
             'address' => ['required', 'string'],
             'occupation' => ['required', 'string'],
             'identity_card_photo' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
@@ -135,6 +148,7 @@ class AuthController extends Controller
             'birth_date.date' => 'Format tanggal lahir tidak valid.',
 
             'phone_number.required' => 'Nomor telepon wajib diisi.',
+            'phone_number.unique' => 'Nomor telepon sudah terdaftar.',
 
             'address.required' => 'Alamat wajib diisi.',
 
@@ -182,7 +196,7 @@ class AuthController extends Controller
             'work_area_id' => $validated['work_area_id'] ?? null,
             'role' => 'group_member',
             'is_verified' => false,
-            'is_active' => false,
+            'is_active' => true,
         ]);
 
         return response()->json([
