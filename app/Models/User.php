@@ -67,9 +67,9 @@ class User extends Authenticatable
         return $this->belongsTo(WorkArea::class);
     }
 
-    public function memberGroup()
+    public function group()
     {
-        return $this->belongsTo(MemberGroup::class, 'group_id');
+        return $this->belongsTo(Group::class, 'group_id');
     }
 
     public function meetings()

@@ -3,37 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\WorkAreaResource;
-use App\Models\MemberGroup;
+use App\Models\Group;
 use App\Models\User;
 use App\Models\WorkArea;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-/**
- * @OA\Tag(
- *     name="Work Areas",
- *     description="Work area management endpoints"
- * )
- */
+
 class WorkAreaController extends Controller
 {
-    /**
-     * @OA\Get(
-     *     path="/api/work-areas",
-     *     tags={"Work Areas"},
-     *     summary="Get all work areas",
-     *     security={{"sanctum":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Success",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/WorkArea"))
-     *         )
-     *     )
-     * )
-     */
+
     public function index()
     {
         $workAreas = WorkArea::latest()->get();
@@ -44,31 +24,6 @@ class WorkAreaController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/work-areas",
-     *     tags={"Work Areas"},
-     *     summary="Create new work area",
-     *     security={{"sanctum":{}}},
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"name_work_area"},
-     *             @OA\Property(property="name_work_area", type="string", example="Wilayah Kerja A")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Work area created successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Work area created successfully."),
-     *             @OA\Property(property="data", ref="#/components/schemas/WorkArea")
-     *         )
-     *     ),
-     *     @OA\Response(response=422, description="Validation error")
-     * )
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -89,37 +44,7 @@ class WorkAreaController extends Controller
         ], 201);
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/work-areas/{id}",
-     *     tags={"Work Areas"},
-     *     summary="Get work area by ID",
-     *     security={{"sanctum":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Success",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="data", ref="#/components/schemas/WorkArea")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Work area not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Work area not found.")
-     *         )
-     *     )
-     * )
-     */
-    public function show(string $id)
+     public function show(string $id)
     {
         $workArea = WorkArea::find($id);
 
@@ -136,45 +61,7 @@ class WorkAreaController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Patch(
-     *     path="/api/work-areas/{id}",
-     *     tags={"Work Areas"},
-     *     summary="Update work area",
-     *     security={{"sanctum":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"name_work_area"},
-     *             @OA\Property(property="name_work_area", type="string", example="Wilayah Kerja B")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Work area updated successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Work area updated successfully."),
-     *             @OA\Property(property="data", ref="#/components/schemas/WorkArea")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Work area not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Work area not found.")
-     *         )
-     *     ),
-     *     @OA\Response(response=422, description="Validation error")
-     * )
-     */
+
     public function update(Request $request, string $id)
     {
         $workArea = WorkArea::find($id);
@@ -204,53 +91,6 @@ class WorkAreaController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Delete(
-     *     path="/api/work-areas/{id}",
-     *     tags={"Work Areas"},
-     *     summary="Delete work area",
-     *     security={{"sanctum":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Work area deleted successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Work area deleted successfully.")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Work area not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Work area not found.")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=422,
-     *         description="Work area cannot be deleted because it is still referenced",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="success", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Wilayah kerja tidak dapat dihapus karena masih digunakan."),
-     *             @OA\Property(
-     *                 property="errors",
-     *                 type="object",
-     *                 @OA\Property(
-     *                     property="work_area",
-     *                     type="array",
-     *                     @OA\Items(type="string", example="Wilayah kerja ini masih digunakan oleh: 5 pengguna dan 2 kelompok anggota.")
-     *                 )
-     *             )
-     *         )
-     *     )
-     * )
-     */
     public function destroy(string $id)
     {
         $workArea = WorkArea::find($id);
@@ -262,19 +102,17 @@ class WorkAreaController extends Controller
             ], 404);
         }
 
-        // Cek apakah work area masih digunakan di users
         $usersCount = User::where('work_area_id', $workArea->id)->count();
         
-        // Cek apakah work area masih digunakan di member groups
-        $memberGroupsCount = MemberGroup::where('work_area_id', $workArea->id)->count();
+        $groupCount = Group::where('work_area_id', $workArea->id)->count();
 
-        if ($usersCount > 0 || $memberGroupsCount > 0) {
+        if ($usersCount > 0 || $groupCount > 0) {
             $usedIn = [];
             if ($usersCount > 0) {
                 $usedIn[] = "{$usersCount} pengguna";
             }
-            if ($memberGroupsCount > 0) {
-                $usedIn[] = "{$memberGroupsCount} kelompok anggota";
+            if ($groupCount > 0) {
+                $usedIn[] = "{$groupCount} kelompok anggota";
             }
 
             return response()->json([

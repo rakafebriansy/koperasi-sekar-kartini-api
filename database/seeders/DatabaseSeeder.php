@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             WorkAreaSeeder::class,
-            MemberGroupSeeder::class,
+            GroupSeeder::class,
             AdminSeeder::class,
             EmployeeSeeder::class,
             MemberSeeder::class,

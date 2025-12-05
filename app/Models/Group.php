@@ -7,23 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class MemberGroup extends Model
+class Group extends Model
 {
-    use HasFactory;
-
-    /**
-     * Tabel yang digunakan oleh model ini.
-     *
-     * Secara default Laravel akan mengira nama tabel "member_groups",
-     * sedangkan migrasi kita membuat tabel "groups", jadi perlu di-override.
-     */
-    protected $table = 'groups';
-
-    /**
-     * Kolom yang boleh diisi mass-assignment.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'number',
@@ -42,11 +27,7 @@ class MemberGroup extends Model
         'treasurer_id',
     ];
 
-    /**
-     * Casting atribut.
-     *
-     * @var array<string, string>
-     */
+
     protected $casts = [
         'is_active' => 'boolean',
     ];
@@ -66,23 +47,8 @@ class MemberGroup extends Model
         return $this->belongsTo(User::class, 'facilitator_id');
     }
 
-    public function secretary(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'secretary_id');
-    }
-
-    public function treasurer(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'treasurer_id');
-    }
-
-    /**
-     * Anggota (users) yang tergabung dalam kelompok ini.
-     */
     public function members(): HasMany
     {
         return $this->hasMany(User::class, 'group_id');
     }
 }
-
-

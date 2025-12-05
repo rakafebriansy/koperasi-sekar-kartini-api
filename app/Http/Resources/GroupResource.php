@@ -5,27 +5,6 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- * @OA\Schema(
- *     schema="Group",
- *     @OA\Property(property="id", type="integer", example=1),
- *     @OA\Property(property="number", type="string", example="GRP001"),
- *     @OA\Property(property="description", type="string", example="Kelompok tani sejahtera", nullable=true),
- *     @OA\Property(property="shared_liability_fund_amount", type="integer", example=50000),
- *     @OA\Property(property="group_fund_amount", type="integer", example=30000),
- *     @OA\Property(property="social_fund_amount", type="integer", example=20000),
- *     @OA\Property(property="total_shared_liability_fund", type="integer", example=500000),
- *     @OA\Property(property="total_group_fund", type="integer", example=300000),
- *     @OA\Property(property="total_social_fund", type="integer", example=200000),
- *     @OA\Property(property="is_active", type="boolean", example=true),
- *     @OA\Property(property="work_area_id", type="integer", example=1, nullable=true),
- *     @OA\Property(property="chairman_id", type="integer", example=1, nullable=true),
- *     @OA\Property(property="facilitator_id", type="integer", example=2, nullable=true),
- *     @OA\Property(property="treasurer_id", type="integer", example=3, nullable=true),
- *     @OA\Property(property="created_at", type="string", format="date-time"),
- *     @OA\Property(property="updated_at", type="string", format="date-time")
- * )
- */
 class GroupResource extends JsonResource
 {
     /**

@@ -19,9 +19,9 @@ class WorkArea extends Model
         return $this->hasMany(User::class);
     }
 
-    public function memberGroups(): HasMany
+    public function groups(): HasMany
     {
-        return $this->hasMany(MemberGroup::class);
+        return $this->hasMany(Group::class);
     }
 }
 
