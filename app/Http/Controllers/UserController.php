@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
@@ -52,11 +54,18 @@ class UserController extends Controller
             $q = $q->where('role', $request->input('role'));
         }
 
+        Log::info($request->input('group_id'));
+        
+        if ($request->input('group_id')) {
+            $q = $q->where('group_id', $request->input('group_id'));
+        }
+
         if ($request->input('search')) {
             $q = $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
         }
-
+        
         $users = $q->get();
+        Log::info($users);
 
         return response()->json([
             'success' => true,
@@ -218,6 +227,42 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'message' => ucfirst($user->role) . 'deleted successfully.',
+        ]);
+    }
+
+    public function updateGroup(string $memberId, string $groupId)
+    {
+        $group = Group::find($groupId);
+
+        if (!$group) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Group is not found.'
+            ], 404);
+        }
+
+        $member = User::find($memberId);
+
+        if (!$member) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Member is not found.'
+            ], 404);
+        }
+
+        if ($member->role != 'group_member') {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not an member.'
+            ], 404);
+        }
+
+        $member->update(['group_id' => $group->id]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Group member added successfully.',
+            'data' => new UserResource($member),
         ]);
     }
 }

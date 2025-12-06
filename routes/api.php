@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{id}', [UserController::class, 'show']);
         Route::put('{id}', [UserController::class, 'update']);
         Route::delete('{id}', [UserController::class, 'destroy']);
+        Route::patch('{id}/group/{groupId}', [UserController::class, 'updateGroup']);
     });
 
     Route::get('/groups', [GroupController::class, 'index']);
