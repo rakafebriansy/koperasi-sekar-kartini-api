@@ -54,8 +54,6 @@ class UserController extends Controller
             $q = $q->where('role', $request->input('role'));
         }
 
-        Log::info($request->input('group_id'));
-        
         if ($request->input('group_id')) {
             $q = $q->where('group_id', $request->input('group_id'));
         }
@@ -63,9 +61,8 @@ class UserController extends Controller
         if ($request->input('search')) {
             $q = $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
         }
-        
+
         $users = $q->get();
-        Log::info($users);
 
         return response()->json([
             'success' => true,
@@ -263,6 +260,24 @@ class UserController extends Controller
             'success' => true,
             'message' => 'Group member added successfully.',
             'data' => new UserResource($member),
+        ]);
+    }
+
+    public function unlistedUsers(Request $request)
+    {
+        $q = User::query()->where('role', 'group_member')->whereNull('group_id');
+
+        if ($request->input('search')) {
+            $q = $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
+        }
+
+        $users = $q->get();
+
+        Log::info($users);
+
+        return response()->json([
+            'success' => true,
+            'data' => UserResource::collection($users),
         ]);
     }
 }

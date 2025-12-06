@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{id}', [WorkAreaController::class, 'destroy']);
     });
 
-    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users',  [UserController::class, 'index']);
     Route::prefix('users')->middleware(['role:admin'])->group(function () {
         Route::post('/', [UserController::class, 'store']);
         Route::get('{id}', [UserController::class, 'show']);
@@ -39,6 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{id}', [UserController::class, 'destroy']);
         Route::patch('{id}/group/{groupId}', [UserController::class, 'updateGroup']);
     });
+
+    Route::get('/unlisted-users' , [UserController::class, 'unlistedUsers']);
 
     Route::get('/groups', [GroupController::class, 'index']);
     Route::prefix('groups')->middleware(['role:admin,employee'])->group(function () {
