@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->id()->primary();
             $table->string('name');
-            $table->string('member_number')->unique();
+            $table->string('member_number')->unique()->nullable();
             $table->string('identity_number')->unique();
             $table->date('birth_date');
             $table->string('phone_number')->unique();
@@ -27,8 +27,11 @@ return new class extends Migration {
             $table->enum('role', ['group_member', 'employee', 'admin']);
             $table->boolean('is_verified')->default(false);
             $table->boolean('is_active')->default(false);
+
             $table->unsignedBigInteger('work_area_id')->nullable();
+            // $table->foreign('work_area_id')->references('id')->on('work_areas')->nullOnDelete();
             $table->unsignedBigInteger('group_id')->nullable();
+            // $table->foreign('group_id')->references('id')->on('groups')->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });

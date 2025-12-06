@@ -11,7 +11,7 @@ class WorkArea extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name_work_area',
+        'name',
     ];
 
     public function users(): HasMany

@@ -27,7 +27,6 @@ class RoleMiddleware
             return $next($request);
         }
 
-        // Flatten roles jika ada comma-separated values
         $allowedRoles = [];
         foreach ($roles as $role) {
             $allowedRoles = array_merge($allowedRoles, array_map('trim', explode(',', $role)));

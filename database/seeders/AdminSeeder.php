@@ -13,7 +13,7 @@ class AdminSeeder extends Seeder
     {
         $now = now();
 
-        $workAreas = DB::table('work_areas')->pluck('id', 'name_work_area')->toArray();
+        $workAreas = DB::table('work_areas')->pluck('id', 'name')->toArray();
 
         $users = [
             'name' => 'Rahmat Admin',
@@ -25,7 +25,7 @@ class AdminSeeder extends Seeder
             'occupation' => 'Administrator Sistem',
             'identity_card_photo' => 'uploads/ktp/rahmat_admin.jpg',
             'self_photo' => 'uploads/self/rahmat_admin.jpg',
-            'password' => Hash::make('admin123'),
+            'password' => Hash::make('password'),
             'role' => 'admin',
             'is_verified' => true,
             'is_active' => true,

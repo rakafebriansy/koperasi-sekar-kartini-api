@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
-    
+
     public function toArray(Request $request): array
     {
         return [
@@ -16,6 +16,7 @@ class UserResource extends JsonResource
             'member_number' => $this->member_number,
             'identity_number' => $this->identity_number,
             'address' => $this->address,
+            'birth_date' => $this->birth_date,
             'occupation' => $this->occupation,
             'identity_card_photo' => $this->identity_card_photo,
             'self_photo' => $this->self_photo,

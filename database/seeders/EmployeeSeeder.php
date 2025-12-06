@@ -13,11 +13,11 @@ class EmployeeSeeder extends Seeder
     {
         $now = now();
 
-        $workAreas = DB::table('work_areas')->pluck('id', 'name_work_area')->toArray();
+        $workAreas = DB::table('work_areas')->pluck('id', 'name')->toArray();
 
-        $employees = [
+        $users = [
             [
-                'name' => 'Siti Karyawan',
+                'name' => 'Siti Qomaria',
                 'member_number' => 'EMP-101',
                 'identity_number' => '3201111111110102',
                 'birth_date' => '1992-06-05',
@@ -27,7 +27,7 @@ class EmployeeSeeder extends Seeder
                 'work_area_key' => 'Kecamatan Patrang',
             ],
             [
-                'name' => 'Budi Karyawan',
+                'name' => 'Budi Santoso',
                 'member_number' => 'EMP-102',
                 'identity_number' => '3201111111110103',
                 'birth_date' => '1990-11-20',
@@ -37,7 +37,7 @@ class EmployeeSeeder extends Seeder
                 'work_area_key' => 'Kecamatan Kaliwates',
             ],
             [
-                'name' => 'Dewi Karyawan',
+                'name' => 'Dewi Hapsari',
                 'member_number' => 'EMP-103',
                 'identity_number' => '3201111111110104',
                 'birth_date' => '1994-01-18',
@@ -47,7 +47,7 @@ class EmployeeSeeder extends Seeder
                 'work_area_key' => 'Kecamatan Ambulu',
             ],
             [
-                'name' => 'Andi Karyawan',
+                'name' => 'Andi Mania',
                 'member_number' => 'EMP-104',
                 'identity_number' => '3201111111110105',
                 'birth_date' => '1989-09-02',
@@ -60,7 +60,7 @@ class EmployeeSeeder extends Seeder
 
         $rows = [];
 
-        foreach ($employees as $emp) {
+        foreach ($users as $emp) {
             $rows[] = [
                 'name' => $emp['name'],
                 'member_number' => $emp['member_number'],

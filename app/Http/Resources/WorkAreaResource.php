@@ -17,7 +17,7 @@ class WorkAreaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name_work_area' => $this->name_work_area,
+            'name' => $this->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

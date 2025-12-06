@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Group extends Model
 {
     protected $fillable = [
-        'name',
         'number',
         'description',
         'shared_liability_fund_amount',
@@ -23,8 +22,6 @@ class Group extends Model
         'work_area_id',
         'chairman_id',
         'facilitator_id',
-        'secretary_id',
-        'treasurer_id',
     ];
 
 

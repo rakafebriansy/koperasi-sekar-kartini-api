@@ -27,12 +27,12 @@ class WorkAreaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name_work_area' => ['required', 'string', 'max:255', 'unique:work_areas,name_work_area'],
+            'name' => ['required', 'string', 'max:255', 'unique:work_areas,name'],
         ], [
-            'name_work_area.required' => 'Nama wilayah kerja wajib diisi.',
-            'name_work_area.string' => 'Nama wilayah kerja harus berupa teks.',
-            'name_work_area.max' => 'Nama wilayah kerja tidak boleh lebih dari 255 karakter.',
-            'name_work_area.unique' => 'Nama wilayah kerja sudah terdaftar.',
+            'name.required' => 'Nama wilayah kerja wajib diisi.',
+            'name.string' => 'Nama wilayah kerja harus berupa teks.',
+            'name.max' => 'Nama wilayah kerja tidak boleh lebih dari 255 karakter.',
+            'name.unique' => 'Nama wilayah kerja sudah terdaftar.',
         ]);
 
         $workArea = WorkArea::create($validated);
@@ -74,12 +74,12 @@ class WorkAreaController extends Controller
         }
 
         $validated = $request->validate([
-            'name_work_area' => ['required', 'string', 'max:255', 'unique:work_areas,name_work_area,'.$workArea->id],
+            'name' => ['required', 'string', 'max:255', 'unique:work_areas,name,'.$workArea->id],
         ], [
-            'name_work_area.required' => 'Nama wilayah kerja wajib diisi.',
-            'name_work_area.string' => 'Nama wilayah kerja harus berupa teks.',
-            'name_work_area.max' => 'Nama wilayah kerja tidak boleh lebih dari 255 karakter.',
-            'name_work_area.unique' => 'Nama wilayah kerja sudah terdaftar.',
+            'name.required' => 'Nama wilayah kerja wajib diisi.',
+            'name.string' => 'Nama wilayah kerja harus berupa teks.',
+            'name.max' => 'Nama wilayah kerja tidak boleh lebih dari 255 karakter.',
+            'name.unique' => 'Nama wilayah kerja sudah terdaftar.',
         ]);
 
         $workArea->update($validated);

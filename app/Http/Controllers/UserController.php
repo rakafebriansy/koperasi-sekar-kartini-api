@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
-class EmployeeController extends Controller
+class UserController extends Controller
 {
     private $errorMessage = [
         'name.required' => 'Nama wajib diisi.',
@@ -46,17 +46,21 @@ class EmployeeController extends Controller
 
     public function index(Request $request)
     {
-        $q = User::query()->where('role', 'employee');
+        $q = User::query();
+
+        if ($request->input('role')) {
+            $q = $q->where('role', $request->input('role'));
+        }
 
         if ($request->input('search')) {
             $q = $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
         }
 
-        $employees = $q->get();
+        $users = $q->get();
 
         return response()->json([
             'success' => true,
-            'data' => UserResource::collection($employees),
+            'data' => UserResource::collection($users),
         ]);
     }
 
@@ -71,6 +75,7 @@ class EmployeeController extends Controller
             'address' => ['required', 'string'],
             'occupation' => ['required', 'string'],
             'password' => ['required', 'string'],
+            'role' => ['required', 'string'],
             'identity_card_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'self_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ], $this->errorMessage);
@@ -79,30 +84,30 @@ class EmployeeController extends Controller
         $selfPhotoPath = null;
 
         if ($request->hasFile('identity_card_photo')) {
-            $identityCardPhotoPath = $request->file('identity_card_photo')->store('employees/identity_cards', 'public');
+            $identityCardPhotoPath = $request->file('identity_card_photo')->store(ucfirst($validated['role']) . 's/identity_cards', 'public');
         }
 
         if ($request->hasFile('self_photo')) {
-            $selfPhotoPath = $request->file('self_photo')->store('employees/photos', 'public');
+            $selfPhotoPath = $request->file('self_photo')->store(ucfirst($validated['role']) . 's/photos', 'public');
         }
 
         if ($request->hasFile('member_card_photo')) {
-            $memberCardPhotoPath = $request->file('member_card_photo')->store('employees/photos', 'public');
+            $memberCardPhotoPath = $request->file('member_card_photo')->store(ucfirst($validated['role']) . 's/photos', 'public');
         }
 
-        $employee = User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'member_number' => $validated['member_number'],
             'identity_number' => $validated['identity_number'],
             'birth_date' => $validated['birth_date'],
             'phone_number' => $validated['phone_number'],
             'address' => $validated['address'],
+            'role' => $validated['role'],
             'occupation' => $validated['occupation'],
             'identity_card_photo' => $identityCardPhotoPath,
             'self_photo' => $selfPhotoPath,
             'member_card_photo' => $memberCardPhotoPath,
             'work_area_id' => null,
-            'role' => 'employee',
             'is_verified' => false,
             'is_active' => true,
             'password' => Hash::make($validated['password']),
@@ -110,53 +115,38 @@ class EmployeeController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Employee created successfully.',
-            'data' => new UserResource($employee),
+            'message' => ucfirst($user->role) . ' created successfully.',
+            'data' => new UserResource($user),
         ], 201);
     }
 
     public function show(string $id)
     {
-        $employee = User::with('workArea')->find($id);
+        $user = User::with('workArea')->find($id);
 
-        if (!$employee) {
+        if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Employee not found.'
-            ], 404);
-        }
-
-        if ($employee->role !== 'employee') {
-            return response()->json([
-                'success' => false,
-                'message' => 'User is not an employee.'
+                'message' => 'User is not found.'
             ], 404);
         }
 
         return response()->json([
             'success' => true,
-            'data' => new UserResource($employee),
+            'data' => new UserResource($user),
         ]);
     }
 
     public function update(Request $request, string $id)
     {
-        $employee = User::find($id);
+        $user = User::find($id);
 
-        if (!$employee) {
+        if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Employee not found.'
+                'message' => 'User is not found.'
             ], 404);
         }
-
-        if ($employee->role !== 'employee') {
-            return response()->json([
-                'success' => false,
-                'message' => 'User is not an employee.'
-            ], 404);
-        }
-
         $validated = $request->validate([
             'name' => ['nullable', 'string', 'max:255'],
             'member_number' => ['nullable', 'string', Rule::unique('users', 'member_number')->ignore($id)],
@@ -175,67 +165,59 @@ class EmployeeController extends Controller
         $updateData = $validated;
 
         if ($request->hasFile('identity_card_photo')) {
-            if ($employee->identity_card_photo) {
-                Storage::disk('public')->delete($employee->identity_card_photo);
+            if ($user->identity_card_photo) {
+                Storage::disk('public')->delete($user->identity_card_photo);
             }
-            $updateData['identity_card_photo'] = $request->file('identity_card_photo')->store('employees/identity_cards', 'public');
+            $updateData['identity_card_photo'] = $request->file('identity_card_photo')->store(ucfirst($user->role) . 's/identity_cards', 'public');
         }
 
         if ($request->hasFile('self_photo')) {
-            if ($employee->self_photo) {
-                Storage::disk('public')->delete($employee->self_photo);
+            if ($user->self_photo) {
+                Storage::disk('public')->delete($user->self_photo);
             }
-            $updateData['self_photo'] = $request->file('self_photo')->store('employees/photos', 'public');
+            $updateData['self_photo'] = $request->file('self_photo')->store(ucfirst($user->role) . 's/photos', 'public');
         }
 
         if ($request->hasFile('member_card_photo')) {
-            if ($employee->member_card_photo) {
-                Storage::disk('public')->delete($employee->member_card_photo);
+            if ($user->member_card_photo) {
+                Storage::disk('public')->delete($user->member_card_photo);
             }
-            $updateData['member_card_photo'] = $request->file('member_card_photo')->store('employees/photos', 'public');
+            $updateData['member_card_photo'] = $request->file('member_card_photo')->store(ucfirst($user->role) . 's/photos', 'public');
         }
 
-        $employee->update($updateData);
+        $user->update($updateData);
 
         return response()->json([
             'success' => true,
-            'message' => 'Employee updated successfully.',
-            'data' => new UserResource($employee),
+            'message' => ucfirst($user->role) . ' updated successfully.',
+            'data' => new UserResource($user),
         ]);
     }
 
     public function destroy(string $id)
     {
-        $employee = User::find($id);
+        $user = User::find($id);
 
-        if (!$employee) {
+        if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Employee not found.'
+                'message' => 'User is not found.'
             ], 404);
         }
 
-        if ($employee->role !== 'employee') {
-            return response()->json([
-                'success' => false,
-                'message' => 'User is not an employee.'
-            ], 404);
+        if ($user->identity_card_photo) {
+            Storage::disk('public')->delete($user->identity_card_photo);
         }
 
-        if ($employee->identity_card_photo) {
-            Storage::disk('public')->delete($employee->identity_card_photo);
+        if ($user->self_photo) {
+            Storage::disk('public')->delete($user->self_photo);
         }
 
-        if ($employee->self_photo) {
-            Storage::disk('public')->delete($employee->self_photo);
-        }
-
-        $employee->delete();
+        $user->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Employee deleted successfully.',
+            'message' => ucfirst($user->role) . 'deleted successfully.',
         ]);
     }
 }
-

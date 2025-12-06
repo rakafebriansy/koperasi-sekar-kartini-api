@@ -24,8 +24,7 @@ class GroupSeeder extends Seeder
 
         $groups = [
             [
-                'name' => 'Kelompok Mawar',
-                'number' => 'GRP-001',
+                'number' => 1,
                 'description' => 'Kelompok Mawar adalah kelompok yang berfokus pada pengembangan usaha kecil menengah.',
                 'shared_liability_fund_amount' => 50000,
                 'group_fund_amount' => 75000,
@@ -36,8 +35,7 @@ class GroupSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'name' => 'Kelompok Melati',
-                'number' => 'GRP-002',
+                'number' => 2,
                 'description' => 'Kelompok Melati aktif dalam kegiatan pemberdayaan masyarakat.',
                 'shared_liability_fund_amount' => 30000,
                 'group_fund_amount' => 45000,
@@ -48,8 +46,7 @@ class GroupSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'name' => 'Kelompok Anggrek',
-                'number' => 'GRP-003',
+                'number' => 3,
                 'description' => 'Kelompok Anggrek berfokus pada pertanian organik.',
                 'shared_liability_fund_amount' => 40000,
                 'group_fund_amount' => 60000,

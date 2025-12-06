@@ -16,22 +16,22 @@ class WorkAreaSeeder extends Seeder
 
         DB::table('work_areas')->insert([
             [
-                'name_work_area' => 'Kecamatan Sumbersari',
+                'name' => 'Kecamatan Sumbersari',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
             [
-                'name_work_area' => 'Kecamatan Patrang',
+                'name' => 'Kecamatan Patrang',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
             [
-                'name_work_area' => 'Kecamatan Kaliwates',
+                'name' => 'Kecamatan Kaliwates',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
             [
-                'name_work_area' => 'Kecamatan Ambulu',
+                'name' => 'Kecamatan Ambulu',
                 'created_at' => $now,
                 'updated_at' => $now,
             ],

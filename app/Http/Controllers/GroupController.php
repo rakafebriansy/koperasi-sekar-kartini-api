@@ -50,18 +50,11 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'number' => ['required', 'string', 'unique:groups,number'],
+            'number' => ['required', 'unique:groups,number'],
             'description' => ['nullable'],
-            'shared_liability_fund_amount' => ['required'],
-            'group_fund_amount' => ['required'],
-            'social_fund_amount' => ['required'],
-            'total_shared_liability_fund' => ['required'],
-            'total_group_fund' => ['required'],
-            'total_social_fund' => ['required'],
-            'work_area_id' => ['nullable', 'exists:work_areas,id'],
+            'work_area_id' => ['required', 'exists:work_areas,id'],
             'chairman_id' => ['nullable', 'exists:users,id'],
-            'facilitator_id' => ['nullable', 'exists:users'],
+            'facilitator_id' => ['nullable', 'exists:users,id'],
         ], $this->errorMessage);
 
 
@@ -103,15 +96,8 @@ class GroupController extends Controller
         }
 
         $validated = $request->validate([
-            'name' => ['nullable', 'string', 'max:255'],
             'number' => ['nullable', 'string', Rule::unique('groups', 'number')->ignore($id)],
             'description' => ['nullable'],
-            'shared_liability_fund_amount' => ['nullable'],
-            'group_fund_amount' => ['nullable'],
-            'social_fund_amount' => ['nullable'],
-            'total_shared_liability_fund' => ['nullable'],
-            'total_group_fund' => ['nullable'],
-            'total_social_fund' => ['nullable'],
             'is_active' => ['nullable'],
             'work_area_id' => ['nullable', 'exists:work_areas'],
             'chairman_id' => ['nullable', 'exists:users'],

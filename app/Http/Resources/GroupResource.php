@@ -27,7 +27,6 @@ class GroupResource extends JsonResource
             'work_area' => new WorkAreaResource($this->workArea),
             'chairman' => new UserResource($this->chairman),
             'facilitator' => new UserResource($this->facilitator),
-            'treasurer' => new UserResource($this->treasurer),
 
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
