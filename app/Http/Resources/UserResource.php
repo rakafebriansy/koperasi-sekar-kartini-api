@@ -26,7 +26,7 @@ class UserResource extends JsonResource
             'is_verified' => $this->is_verified,
             'is_active' => $this->is_active,
             'work_area' => new WorkAreaResource($this->workArea),
-            'group' => new GroupResource($this->group),
+            'group' => $this->group != null ? $this->group->name : null,
         ];
     }
 }

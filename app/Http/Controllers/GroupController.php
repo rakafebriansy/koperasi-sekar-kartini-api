@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -129,6 +130,77 @@ class GroupController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Group deleted successfully.',
+        ]);
+    }
+
+    public function updateChairman(string $groupId, string $chairmanId)
+    {
+        $group = Group::find($groupId);
+
+        if (!$group) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Group is not found.'
+            ], 404);
+        }
+
+        $chairman = User::find($chairmanId);
+
+        if (!$chairman) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Member is not found.'
+            ], 404);
+        }
+
+        if ($chairman->role != 'group_member') {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not a member.'
+            ], 404);
+        }
+
+        $group->update(['chairman_id' => $chairman->id]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Group\'s chairman updated successfully.',
+            'data' => new GroupResource($group),
+        ]);
+    }
+    public function updateFacilitator(string $groupId, string $facilitatorId)
+    {
+        $group = Group::find($groupId);
+
+        if (!$group) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Group is not found.'
+            ], 404);
+        }
+
+        $facilitator = User::find($facilitatorId);
+
+        if (!$facilitator) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Member is not found.'
+            ], 404);
+        }
+
+        if ($facilitator->role != 'employee') {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not an employee.'
+            ], 404);
+        }
+
+        $group->update(['facilitator_id' => $facilitator->id]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Group\'s facilitator updated successfully.',
+            'data' => new GroupResource($group),
         ]);
     }
 }
