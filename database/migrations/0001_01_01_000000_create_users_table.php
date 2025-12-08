@@ -25,7 +25,6 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['group_member', 'employee', 'admin']);
-            $table->boolean('is_verified')->default(false);
             $table->boolean('is_active')->default(false);
 
             $table->unsignedBigInteger('work_area_id')->nullable();

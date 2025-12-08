@@ -15,6 +15,8 @@ class MemberSeeder extends Seeder
 
         $groups = DB::table('groups')->pluck('id', 'number')->toArray();
 
+        $workAreas = DB::table('work_areas')->pluck('id', 'name')->toArray();
+
         $members = [
             [
                 'group_number' => 1,
@@ -25,6 +27,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560001',
                 'address' => 'Dusun Krajan 1, Desa Sumberjati, Kab. Jember',
                 'occupation' => 'Pedagang Sembako',
+                'work_area_key' => 'Kecamatan Sumbersari',
             ],
             [
                 'group_number' => 1,
@@ -35,6 +38,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560002',
                 'address' => 'Dusun Karangrejo, Desa Sumberjati, Kab. Jember',
                 'occupation' => 'Ibu Rumah Tangga',
+                'work_area_key' => 'Kecamatan Sumbersari',
             ],
             [
                 'group_number' => 1,
@@ -45,6 +49,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560003',
                 'address' => 'Dusun Krajan 2, Desa Sumberjati, Kab. Jember',
                 'occupation' => 'Teknisi Elektronik',
+                'work_area_key' => 'Kecamatan Sumbersari',
             ],
             [
                 'group_number' => 1,
@@ -55,6 +60,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560004',
                 'address' => 'Dusun Gumuk, Desa Sumberjati, Kab. Jember',
                 'occupation' => 'Penjahit',
+                'work_area_key' => 'Kecamatan Sumbersari',
             ],
             [
                 'group_number' => 1,
@@ -65,6 +71,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560005',
                 'address' => 'Dusun Krajan 3, Desa Sumberjati, Kab. Jember',
                 'occupation' => 'Petani Kopi',
+                'work_area_key' => 'Kecamatan Sumbersari',
             ],
             [
                 'group_number' => 2,
@@ -75,6 +82,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560006',
                 'address' => 'Dusun Kaliwates, Desa Wonoasri, Kab. Jember',
                 'occupation' => 'Penjual Kue',
+                'work_area_key' => 'Kecamatan Sumbersari',
             ],
             [
                 'group_number' => 2,
@@ -85,6 +93,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560007',
                 'address' => 'Dusun Karanganyar, Desa Wonoasri, Kab. Jember',
                 'occupation' => 'Supir Angkot',
+                'work_area_key' => 'Kecamatan Sumbersari',
             ],
             [
                 'group_number' => 2,
@@ -95,6 +104,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560008',
                 'address' => 'Dusun Krajan, Desa Wonoasri, Kab. Jember',
                 'occupation' => 'Pedagang Pakaian',
+                'work_area_key' => 'Kecamatan Sumbersari',
             ],
             [
                 'group_number' => 2,
@@ -105,6 +115,7 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560009',
                 'address' => 'Dusun Kebonsari, Desa Wonoasri, Kab. Jember',
                 'occupation' => 'Montir Bengkel',
+                'work_area_key' => 'Kecamatan Ambulu',
             ],
             [
                 'group_number' => 2,
@@ -115,6 +126,8 @@ class MemberSeeder extends Seeder
                 'phone_number' => '081234560010',
                 'address' => 'Dusun Sumberjo, Desa Wonoasri, Kab. Jember',
                 'occupation' => 'Pemilik Warung',
+                'work_area_key' => 'Kecamatan Sumbersari',
+
             ],
         ];
 
@@ -134,10 +147,9 @@ class MemberSeeder extends Seeder
                 'self_photo' => 'uploads/self/' . Str::slug($m['name']) . '.jpg',
                 'password' => Hash::make('password'),
                 'role' => 'group_member',
-                'is_verified' => true,
                 'is_active' => true,
-                'work_area_id' => null,
                 'group_id' => $groups[$m['group_number']] ?? null,
+                'work_area_id' => $workAreas[$m['work_area_key']] ?? null,
                 'remember_token' => Str::random(10),
                 'created_at' => $now,
                 'updated_at' => $now,

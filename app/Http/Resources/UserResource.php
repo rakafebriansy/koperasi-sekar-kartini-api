@@ -23,7 +23,6 @@ class UserResource extends JsonResource
             'member_card_photo' => $this->member_card_photo,
             'email_verified_at' => $this->email_verified_at,
             'role' => $this->role,
-            'is_verified' => $this->is_verified,
             'is_active' => $this->is_active,
             'work_area' => new WorkAreaResource($this->workArea),
             'group' => $this->group != null ? $this->group->name : null,

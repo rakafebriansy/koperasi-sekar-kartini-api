@@ -114,7 +114,6 @@ class UserController extends Controller
             'self_photo' => $selfPhotoPath,
             'member_card_photo' => $memberCardPhotoPath,
             'work_area_id' => null,
-            'is_verified' => false,
             'is_active' => true,
             'password' => Hash::make($validated['password']),
         ]);
@@ -263,9 +262,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function unlistedUsers(Request $request)
+    public function unlistedMembers(Request $request)
     {
         $q = User::query()->where('role', 'group_member')->whereNull('group_id');
+
+        if ($request->input('work_area_id')) {
+            $q->where('work_area_id', $request->input('work_area_id'));
+        }
 
         if ($request->input('search')) {
             $q = $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
@@ -273,11 +276,60 @@ class UserController extends Controller
 
         $users = $q->get();
 
-        Log::info($users);
+        return response()->json([
+            'success' => true,
+            'data' => UserResource::collection($users),
+        ]);
+    }
+
+    public function inactiveMembers(Request $request)
+    {
+        $q = User::query()->where('role', 'group_member')->where('is_active', false);
+
+        if ($request->input('search')) {
+            $q = $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
+        }
+
+        $users = $q->get();
 
         return response()->json([
             'success' => true,
             'data' => UserResource::collection($users),
         ]);
     }
+
+    public function activate(Request $request, string $id)
+    {
+        $member = User::find($id);
+
+        if (!$member) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Member is not found.'
+            ], 404);
+        }
+
+        if ($member->role != 'group_member') {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not an member.'
+            ], 404);
+        }
+
+        if ($request->has('is_active')) {
+
+            $member->update(['is_active' => $request->is_active]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Member ' . $request->is_active ? 'activated' : 'deactivated' . ' successfully.',
+                'data' => new UserResource($member),
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => "There's no is_active field on payload.",
+        ], 400);
+
+    }
+
 }

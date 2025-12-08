@@ -27,7 +27,6 @@ class AdminSeeder extends Seeder
             'self_photo' => 'uploads/self/rahmat_admin.jpg',
             'password' => Hash::make('password'),
             'role' => 'admin',
-            'is_verified' => true,
             'is_active' => true,
             'work_area_id' => $workAreas['Kecamatan Sumbersari'] ?? null,
             'group_id' => null,

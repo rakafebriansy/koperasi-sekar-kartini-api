@@ -27,10 +27,6 @@ class AuthController extends Controller
             return response()->json(['success' => false, 'message' => 'Invalid phone number or password.'], 401);
         }
 
-        if (!$user->is_verified) {
-            return response()->json(['success' => false, 'message' => 'Account is not verified.'], 403);
-        }
-
         if (!$user->is_active) {
             return response()->json(['success' => false, 'message' => 'Account is not active.'], 403);
         }
@@ -116,8 +112,7 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
             'work_area_id' => $validated['work_area_id'] ?? null,
             'role' => 'group_member',
-            'is_verified' => false,
-            'is_active' => true,
+            'is_active' => false,
         ]);
 
         return response()->json([

@@ -98,12 +98,12 @@ class GroupController extends Controller
         }
 
         $validated = $request->validate([
-            'number' => ['nullable', 'string', Rule::unique('groups', 'number')->ignore($id)],
+            'number' => ['nullable', Rule::unique('groups', 'number')->ignore($id)],
             'description' => ['nullable'],
             'is_active' => ['nullable'],
-            'work_area_id' => ['nullable', 'exists:work_areas'],
-            'chairman_id' => ['nullable', 'exists:users'],
-            'facilitator_id' => ['nullable', 'exists:users'],
+            'work_area_id' => ['nullable', 'exists:work_areas,id'],
+            'chairman_id' => ['nullable', 'exists:users,id'],
+            'facilitator_id' => ['nullable', 'exists:users,id'],
         ], $this->errorMessage);
 
         $group->update($validated);

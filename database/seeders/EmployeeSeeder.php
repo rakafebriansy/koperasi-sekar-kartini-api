@@ -13,7 +13,6 @@ class EmployeeSeeder extends Seeder
     {
         $now = now();
 
-        $workAreas = DB::table('work_areas')->pluck('id', 'name')->toArray();
 
         $users = [
             [
@@ -24,7 +23,6 @@ class EmployeeSeeder extends Seeder
                 'phone_number' => '081200000102',
                 'address' => 'Jl. Kenanga No. 5, Patrang, Jember',
                 'occupation' => 'Staf Lapangan',
-                'work_area_key' => 'Kecamatan Patrang',
             ],
             [
                 'name' => 'Budi Santoso',
@@ -34,7 +32,6 @@ class EmployeeSeeder extends Seeder
                 'phone_number' => '081200000103',
                 'address' => 'Jl. Mawar No. 7, Kaliwates, Jember',
                 'occupation' => 'Petugas Kredit',
-                'work_area_key' => 'Kecamatan Kaliwates',
             ],
             [
                 'name' => 'Dewi Hapsari',
@@ -44,7 +41,6 @@ class EmployeeSeeder extends Seeder
                 'phone_number' => '081200000104',
                 'address' => 'Jl. Melati No. 3, Ambulu, Jember',
                 'occupation' => 'Petugas Administrasi',
-                'work_area_key' => 'Kecamatan Ambulu',
             ],
             [
                 'name' => 'Andi Mania',
@@ -54,7 +50,6 @@ class EmployeeSeeder extends Seeder
                 'phone_number' => '081200000105',
                 'address' => 'Jl. Teratai No. 2, Sumbersari, Jember',
                 'occupation' => 'Koordinator Lapangan',
-                'work_area_key' => 'Kecamatan Sumbersari',
             ],
         ];
 
@@ -73,9 +68,7 @@ class EmployeeSeeder extends Seeder
                 'self_photo' => 'uploads/self/' . Str::slug($emp['name']) . '.jpg',
                 'password' => Hash::make('password'),
                 'role' => 'employee',
-                'is_verified' => true,
                 'is_active' => true,
-                'work_area_id' => $workAreas[$emp['work_area_key']] ?? null,
                 'group_id' => null,
                 'remember_token' => Str::random(10),
                 'created_at' => $now,

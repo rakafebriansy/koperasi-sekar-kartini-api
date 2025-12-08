@@ -30,7 +30,6 @@ class User extends Authenticatable
         'self_photo',
         'password',
         'role',
-        'is_verified',
         'is_active',
         'work_area_id',
         'group_id',
@@ -57,7 +56,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'birth_date' => 'date',
             'password' => 'hashed',
-            'is_verified' => 'boolean',
             'is_active' => 'boolean',
         ];
     }
