@@ -88,6 +88,7 @@ class UserController extends Controller
 
         $identityCardPhotoPath = null;
         $selfPhotoPath = null;
+        $memberCardPhotoPath = null;
 
         if ($request->hasFile('identity_card_photo')) {
             $identityCardPhotoPath = $request->file('identity_card_photo')->store(ucfirst($validated['role']) . 's/identity_cards', 'public');

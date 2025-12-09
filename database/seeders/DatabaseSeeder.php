@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             EmployeeSeeder::class,
             MemberSeeder::class,
-            MeetingSeeder::class,
-            UsersMeetingsSeeder::class,
+            // MeetingSeeder::class,
+            // UsersMeetingsSeeder::class,
             SavingsSeeder::class,
             LoansSeeder::class,
         ]);

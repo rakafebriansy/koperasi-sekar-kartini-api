@@ -13,14 +13,17 @@ return new class extends Migration
     {
         Schema::create('meetings', function (Blueprint $table) {
             $table->id()->primary();
-            $table->enum('meeting_type', ['Activity', 'Routine Meeting']);
-            $table->date('date');
-            $table->time('time');
+            $table->string('name');
+            $table->enum('type', ['group', 'coop']);
+            $table->dateTime('datetime');
             $table->string('location');
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->longText('description');
+
             $table->unsignedBigInteger('group_id')->nullable();
-            $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
+            $table->foreign('group_id')->references('id')->on('groups')->nullOnDelete();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
             $table->timestamps();
         });
     }

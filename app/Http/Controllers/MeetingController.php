@@ -9,22 +9,36 @@ use Illuminate\Http\Request;
 class MeetingController extends Controller
 {
     private $errorMessage = [
-        'meeting_type.required' => 'Tipe pertemuan wajib diisi.',
-        'meeting_type.in' => 'Tipe pertemuan harus Activity atau Routine Meeting.',
-        'date.required' => 'Tanggal wajib diisi.',
-        'time.required' => 'Waktu wajib diisi.',
-        'location.required' => 'Lokasi wajib diisi.',
-        'photo.required' => 'Foto wajib diisi.',
-        'description.required' => 'Deskripsi wajib diisi.',
-        'group_id.exists' => 'Group tidak valid.',
+        'name.required' => 'Nama kegiatan wajib diisi.',
+        'name.string' => 'Nama kegiatan harus berupa teks.',
+
+        'type.required' => 'Jenis kegiatan wajib dipilih.',
+        'type.in' => 'Jenis kegiatan harus berupa "group" atau "coop".',
+
+        'datetime.required' => 'Tanggal dan waktu kegiatan wajib diisi.',
+
+        'location.required' => 'Lokasi kegiatan wajib diisi.',
+        'location.string' => 'Lokasi kegiatan harus berupa teks.',
+
+        'description.required' => 'Deskripsi kegiatan wajib diisi.',
+        'description.string' => 'Deskripsi kegiatan harus berupa teks.',
+
+        'group_id.exists' => 'Kelompok yang dipilih tidak ditemukan.',
+
+        'user_id.required' => 'User pembuat kegiatan wajib ada.',
+        'user_id.exists' => 'User tidak valid atau tidak ditemukan.',
     ];
 
     public function index(Request $request)
     {
         $q = Meeting::query();
 
-        if ($request->input('search')) {
-            $q->whereRaw('LOWER(description) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
+        if ($request->has(key: 'search')) {
+            $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
+        }
+
+        if ($request->has('limit')) {
+            $q->limit($request->input('limit'));
         }
 
         $meetings = $q->get();
@@ -38,16 +52,31 @@ class MeetingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'meeting_type' => ['required', 'in:Activity,Routine Meeting'],
-            'date' => ['required', 'date'],
-            'time' => ['required'],
+            'name' => ['required', 'string'],
+            'type' => ['required', 'in:group,coop'],
+            'datetime' => ['required'],
             'location' => ['required', 'string'],
-            'photo' => ['required', 'string'],
+            'photo' => ['nullable', 'image', 'max:2048'],
             'description' => ['required', 'string'],
             'group_id' => ['nullable', 'exists:groups,id'],
         ], $this->errorMessage);
 
-        $meeting = Meeting::create($validated);
+        $photoPath = null;
+
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('meetings/photos', 'public');
+        }
+
+        $meeting = Meeting::create([
+            'name' => $validated['name'],
+            'type' => $validated['type'],
+            'datetime' => $validated['datetime'],
+            'location' => $validated['location'],
+            'photo' => $photoPath,
+            'description' => $validated['description'],
+            'group_id' => $validated['group_id'] ?? null,
+            'user_id' => auth()->id(),
+        ]);
 
         return response()->json([
             'success' => true,
@@ -73,28 +102,37 @@ class MeetingController extends Controller
         ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, Meeting $meeting)
     {
-        $meeting = Meeting::find($id);
-
-        if (!$meeting) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Meeting is not found.',
-            ], 404);
-        }
-
         $validated = $request->validate([
-            'meeting_type' => ['nullable', 'in:Activity,Routine Meeting'],
-            'date' => ['nullable', 'date'],
-            'time' => ['nullable'],
-            'location' => ['nullable', 'string'],
-            'photo' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
+            'name' => ['sometimes', 'required', 'string'],
+            'type' => ['sometimes', 'required', 'in:group,coop'],
+            'datetime' => ['sometimes', 'required'],
+            'location' => ['sometimes', 'required', 'string'],
+            'photo' => ['sometimes', 'image', 'max:2048'], // optional file
+            'description' => ['sometimes', 'required', 'string'],
             'group_id' => ['nullable', 'exists:groups,id'],
         ], $this->errorMessage);
 
-        $meeting->update($validated);
+        $photoPath = $meeting->photo;
+
+        if ($request->hasFile('photo')) {
+            if ($meeting->photo && \Storage::disk('public')->exists($meeting->photo)) {
+                \Storage::disk('public')->delete($meeting->photo);
+            }
+
+            $photoPath = $request->file('photo')->store('meetings/photos', 'public');
+        }
+        $meeting->update([
+            'name' => $validated['name'] ?? $meeting->name,
+            'type' => $validated['type'] ?? $meeting->type,
+            'datetime' => $validated['datetime'] ?? $meeting->datetime,
+            'location' => $validated['location'] ?? $meeting->location,
+            'photo' => $photoPath,
+            'description' => $validated['description'] ?? $meeting->description,
+            'group_id' => $validated['group_id'] ?? $meeting->group_id,
+            'user_id' => $validated['user_id'] ?? $meeting->user_id,
+        ]);
 
         return response()->json([
             'success' => true,

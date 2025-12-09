@@ -29,7 +29,6 @@ class GroupSeeder extends Seeder
                 'shared_liability_fund_amount' => 50000,
                 'group_fund_amount' => 75000,
                 'social_fund_amount' => 25000,
-                'is_active' => true,
             ],
             [
                 'number' => 2,
@@ -37,7 +36,6 @@ class GroupSeeder extends Seeder
                 'shared_liability_fund_amount' => 30000,
                 'group_fund_amount' => 45000,
                 'social_fund_amount' => 15000,
-                'is_active' => true,
             ],
             [
                 'number' => 3,
@@ -45,7 +43,6 @@ class GroupSeeder extends Seeder
                 'shared_liability_fund_amount' => 40000,
                 'group_fund_amount' => 60000,
                 'social_fund_amount' => 20000,
-                'is_active' => false,
             ],
         ];
 

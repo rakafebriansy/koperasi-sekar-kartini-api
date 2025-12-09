@@ -10,17 +10,22 @@ class Meeting extends Model
     use HasFactory;
 
     protected $fillable = [
-        'meeting_type',
-        'date',
-        'time',
+        'name',
+        'type',
+        'datetime',
         'location',
         'photo',
         'description',
         'group_id',
+        'user_id',
     ];
 
     public function group()
     {
         return $this->belongsTo(Group::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

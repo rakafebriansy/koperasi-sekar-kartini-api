@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\GroupController;
@@ -55,9 +56,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('{id}/chairman/{userId}', [GroupController::class, 'updateChairman']);
     });
 
-
-    // Route::middleware(['role:employee'])->group(function () {
-    //     Route::patch('users/{id}/group', [Userc::class, 'updateGroupId']);
-    // });
+    Route::prefix('meetings')->group(function () {
+        Route::get('/', [MeetingController::class, 'index']);
+        Route::post('/', [MeetingController::class, 'store']);
+        Route::get('{id}', [MeetingController::class, 'show']);
+        Route::put('{id}', [MeetingController::class, 'update']);
+        Route::delete('{id}', [MeetingController::class, 'destroy']);
+    });
 });
 

@@ -42,8 +42,15 @@ class GroupController extends Controller
     {
         $q = Group::query();
 
-        if ($request->input('search')) {
-            $q = $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
+        if ($request->filled('search')) {
+            $search = strtolower($request->input('search'));
+
+            $q->leftJoin('work_areas', 'work_areas.id', '=', 'groups.work_area_id')
+                ->where(function ($q) use ($search) {
+                    $q->whereRaw('LOWER(groups.number) LIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('LOWER(work_areas.name) LIKE ?', ["%{$search}%"]);
+                })
+                ->select('groups.*'); // pastikan select groups agar tidak bentrok
         }
 
         $groups = $q->get();
