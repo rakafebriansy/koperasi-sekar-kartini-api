@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{id}', [GroupController::class, 'show']);
         Route::put('{id}', [GroupController::class, 'update']);
         Route::delete('{id}', [GroupController::class, 'destroy']);
+        Route::patch('{id}/update-fund-amount', [GroupController::class, 'updateFundAmount']);
         Route::patch('{id}/facilitator/{userId}', [GroupController::class, 'updateFacilitator']);
         Route::patch('{id}/chairman/{userId}', [GroupController::class, 'updateChairman']);
     });

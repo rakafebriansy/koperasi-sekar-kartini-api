@@ -14,13 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->integer('number')->unique();
             $table->longText('description');
-            $table->integer('shared_liability_fund_amount')->default(0);
-            $table->integer('group_fund_amount')->default(0);
-            $table->integer('social_fund_amount')->default(0);
-            $table->bigInteger('total_shared_liability_fund')->default(0);
-            $table->bigInteger('total_group_fund')->default(0);
-            $table->bigInteger('total_social_fund')->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->bigInteger('shared_liability_fund_amount')->default(0);
+            $table->bigInteger('group_fund_amount')->default(0);
+            $table->bigInteger('social_fund_amount')->default(0);
 
             $table->unsignedBigInteger('work_area_id');
             $table->foreign('work_area_id')->references('id')->on('work_areas')->restrictOnDelete();

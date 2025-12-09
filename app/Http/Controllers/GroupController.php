@@ -31,6 +31,11 @@ class GroupController extends Controller
         'work_area_id.exists' => 'Area kerja yang dipilih tidak valid.',
         'chairman_id.exists' => 'Ketua yang dipilih tidak valid.',
         'facilitator_id.exists' => 'Fasilitator yang dipilih tidak valid.',
+
+        'fund_type.required' => 'Jenis kas wajib diisi.',
+        'fund_type.in' => 'Jenis kas harus sesuai.',
+
+        'fund_amount.required' => 'Jumlah kas wajib diisi.',
     ];
 
     public function index(Request $request)
@@ -201,6 +206,49 @@ class GroupController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Group\'s facilitator updated successfully.',
+            'data' => new GroupResource($group),
+        ]);
+    }
+
+    public function updateFundAmount(Request $request, string $groupId)
+    {
+        $request->validate([
+            'fund_type' => ['required', 'in:kas_tanggung_renteng,kas_kelompok,dana_sosial'],
+            'fund_amount' => ['required'],
+        ], $this->errorMessage);
+
+
+        $group = Group::find($groupId);
+
+        if (!$group) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Group is not found.'
+            ], 404);
+        }
+
+        switch ($request->input('fund_type')) {
+            case 'kas_tanggung_renteng':
+                $group->update([
+                    'shared_liability_fund_amount' => $request->input('fund_amount')
+                ]);
+                break;
+            case 'kas_kelompok':
+                $group->update([
+                    'group_fund_amount' => $request->input('fund_amount')
+                ]);
+                break;
+            case 'dana_sosial':
+                $group->update([
+                    'social_fund_amount' => $request->input('fund_amount')
+                ]);
+                break;
+        }
+
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Group\'s fund amount updated successfully.',
             'data' => new GroupResource($group),
         ]);
     }
