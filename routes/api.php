@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\SavingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\GroupController;
@@ -62,6 +64,22 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{id}', [MeetingController::class, 'show']);
         Route::put('{id}', [MeetingController::class, 'update']);
         Route::delete('{id}', [MeetingController::class, 'destroy']);
+    });
+
+    Route::get('/loans', [LoanController::class, 'index']);
+    Route::prefix('loans')->middleware('role:admin,employee')->group(function () {
+        Route::post('/', [LoanController::class, 'store']);
+        Route::get('{id}', [LoanController::class, 'show']);
+        Route::put('{id}', [LoanController::class, 'update']);
+        Route::delete('{id}', [LoanController::class, 'destroy']);
+    });
+
+    Route::get('/savings', [SavingsController::class, 'index']);
+    Route::prefix('savings')->middleware('role:admin,employee')->group(function () {
+        Route::post('/', [SavingsController::class, 'store']);
+        Route::get('{id}', [SavingsController::class, 'show']);
+        Route::put('{id}', [SavingsController::class, 'update']);
+        Route::delete('{id}', [SavingsController::class, 'destroy']);
     });
 });
 

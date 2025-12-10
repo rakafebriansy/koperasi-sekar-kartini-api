@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,11 +12,22 @@ return new class extends Migration
     {
         Schema::create('savings', function (Blueprint $table) {
             $table->id()->primary();
-            $table->enum('saving_type', ['shared_liability', 'group', 'social']);
-            $table->unsignedBigInteger('group_id')->nullable();
-            $table->foreign('group_id')->references('id')->on('groups')->onDelete('set null');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->enum('type', [
+                'simpanan_pokok',
+                'simpanan_wajib',
+                'simpanan_wajib_khusus',
+                'simpanan_sukarela',
+                'simpanan_bersama',
+                'simpanan_berjangka',
+                'simpanan_hari_raya',
+                'simpanan_hari_tua',
+                'simpanan_rekreasi',
+            ]);
+            $table->unsignedBigInteger('nominal');
+            $table->integer('year');
+            $table->tinyInteger('month');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->restrictOnDelete();
 
             $table->timestamps();
         });
