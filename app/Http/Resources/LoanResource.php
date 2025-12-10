@@ -14,6 +14,16 @@ class LoanResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'type' => $this->type,
+            'nominal' => $this->nominal,
+            'status' => $this->status,
+            'year' => $this->year,
+            'month' => $this->month,
+            'user' => new UserResource($this->user),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }

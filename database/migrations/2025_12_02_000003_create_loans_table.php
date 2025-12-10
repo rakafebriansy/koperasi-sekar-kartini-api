@@ -19,6 +19,7 @@ return new class extends Migration {
                 'pinjaman_bahan_pokok',
                 'pinjaman_barang_dagangan',
                 'pinjaman_lebaran',
+                'pinjaman_rekreasi',
                 'pinjaman_spesial',
             ]);
             $table->enum('status', ['unpaid', 'paid'])->default('unpaid');

@@ -36,14 +36,17 @@ class LoanController extends Controller
     {
         $q = Loan::query();
 
-        if ($request->filled('date')) {
-            $iso = $request->date;
+        if ($request->filled('search')) {
 
-            $dt = Carbon::parse($iso);
+            $search = $request->search;
+
+
+            $dt = Carbon::createFromFormat('m/Y', $search);
 
             $q->where('year', $dt->year)
                 ->where('month', $dt->month);
         }
+
         $loan = $q->get();
 
         return response()->json([
@@ -101,11 +104,12 @@ class LoanController extends Controller
         }
 
         $validated = $request->validate([
-            'type' => ['required', 'in:' . implode(',', $this->loanType)],
-            'nominal' => ['required'],
-            'year' => ['required'],
-            'month' => ['required'],
-            'user_id' => ['required', 'exists:users,id'],
+            'type' => ['nullable', 'in:' . implode(',', $this->loanType)],
+            'nominal' => ['nullable'],
+            'year' => ['nullable'],
+            'status' => ['nullable'],
+            'month' => ['nullable'],
+            'user_id' => ['nullable', 'exists:users,id'],
         ], $this->errorMessage);
 
         $loan->update($validated);

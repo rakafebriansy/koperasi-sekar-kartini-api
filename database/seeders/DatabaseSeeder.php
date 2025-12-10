@@ -29,7 +29,6 @@ class DatabaseSeeder extends Seeder
             // MeetingSeeder::class,
             // UsersMeetingsSeeder::class,
             SavingsSeeder::class,
-            LoansSeeder::class,
         ]);
     }
 }

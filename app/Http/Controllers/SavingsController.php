@@ -38,19 +38,22 @@ class SavingsController extends Controller
     {
         $q = Savings::query();
 
-        if ($request->filled('date')) {
-            $iso = $request->date;
+        if ($request->filled('search')) {
 
-            $dt = Carbon::parse($iso);
+            $search = $request->search;
+
+
+            $dt = Carbon::createFromFormat('m/Y', $search);
 
             $q->where('year', $dt->year)
                 ->where('month', $dt->month);
         }
-        $savings = $q->get();
+
+        $loan = $q->get();
 
         return response()->json([
             'success' => true,
-            'data' => SavingsResource::collection($savings),
+            'data' => SavingsResource::collection($loan),
         ]);
     }
 
@@ -103,11 +106,11 @@ class SavingsController extends Controller
         }
 
         $validated = $request->validate([
-            'type' => ['required', 'in:' . implode(',', $this->savingsType)],
-            'nominal' => ['required'],
-            'year' => ['required'],
-            'month' => ['required'],
-            'user_id' => ['required', 'exists:users,id'],
+            'type' => ['nullable', 'in:' . implode(',', $this->savingsType)],
+            'nominal' => ['nullable'],
+            'year' => ['nullable'],
+            'month' => ['nullable'],
+            'user_id' => ['nullable', 'exists:users,id'],
         ], $this->errorMessage);
 
         $savings->update($validated);
