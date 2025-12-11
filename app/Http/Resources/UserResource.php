@@ -25,7 +25,8 @@ class UserResource extends JsonResource
             'role' => $this->role,
             'is_active' => $this->is_active,
             'work_area' => new WorkAreaResource($this->workArea),
-            'group' => $this->group != null ? $this->group->name : null,
+            'group_id' => $this->group != null ? $this->group->id : null,
+            'group_number' => $this->group != null ? $this->group->number : null,
         ];
     }
 }

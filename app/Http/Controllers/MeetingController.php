@@ -32,10 +32,19 @@ class MeetingController extends Controller
     public function index(Request $request)
     {
         $q = Meeting::query();
+        $user = auth()->user();
 
         if ($request->has(key: 'search')) {
             $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
         }
+
+        if ($user->role === 'group_member') {
+            $q->where(function ($query) use ($user) {
+                $query->whereNull('group_id')
+                    ->orWhere('group_id', $user->group_id);
+            });
+        }
+
 
         if ($request->has('limit')) {
             $q->limit($request->input('limit'));

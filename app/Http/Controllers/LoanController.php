@@ -92,6 +92,31 @@ class LoanController extends Controller
         ]);
     }
 
+    public function sumByMonth(Request $request)
+    {
+        $q = Loan::query();
+
+        if ($request->year && $request->month) {
+            $q->where('year', $request->year)
+                ->where('month', $request->month);
+        }
+
+        $totalNominal = $q->sum('nominal');
+
+        if ($totalNominal == 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Loan not found for the specified month and year.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => (int) $totalNominal
+            ,
+        ]);
+    }
+
     public function update(Request $request, string $id)
     {
         $loan = Loan::find($id);

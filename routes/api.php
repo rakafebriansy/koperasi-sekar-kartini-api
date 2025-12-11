@@ -48,9 +48,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/inactive-members', [UserController::class, 'inactiveMembers']);
 
     Route::get('/groups', [GroupController::class, 'index']);
+    Route::get('/groups/{id}', [GroupController::class, 'show']);
     Route::prefix('groups')->middleware(['role:admin,employee'])->group(function () {
         Route::post('/', [GroupController::class, 'store']);
-        Route::get('{id}', [GroupController::class, 'show']);
         Route::put('{id}', [GroupController::class, 'update']);
         Route::delete('{id}', [GroupController::class, 'destroy']);
         Route::patch('{id}/update-fund-amount', [GroupController::class, 'updateFundAmount']);
@@ -67,6 +67,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/loans', [LoanController::class, 'index']);
+    Route::get('/loans/sum-by-month', [LoanController::class, 'sumByMonth']);
     Route::prefix('loans')->middleware('role:admin,employee')->group(function () {
         Route::post('/', [LoanController::class, 'store']);
         Route::get('{id}', [LoanController::class, 'show']);
@@ -75,6 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/savings', [SavingsController::class, 'index']);
+    Route::get('/savings/sum-by-month', [SavingsController::class, 'sumByMonth']);
     Route::prefix('savings')->middleware('role:admin,employee')->group(function () {
         Route::post('/', [SavingsController::class, 'store']);
         Route::get('{id}', [SavingsController::class, 'show']);
