@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\GroupResource;
-use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -50,7 +49,7 @@ class GroupController extends Controller
                     $q->whereRaw('LOWER(groups.number) LIKE ?', ["%{$search}%"])
                         ->orWhereRaw('LOWER(work_areas.name) LIKE ?', ["%{$search}%"]);
                 })
-                ->select('groups.*'); // pastikan select groups agar tidak bentrok
+                ->select('groups.*');
         }
 
         $groups = $q->get();

@@ -38,10 +38,12 @@ class SavingsController extends Controller
     {
         $q = Savings::query();
 
+        if($request->has('member_id'))  {
+            $q->where('user_id', $request->member_id);
+        }
+
         if ($request->filled('search')) {
-
             $search = $request->search;
-
 
             $dt = Carbon::createFromFormat('m/Y', $search);
 
@@ -49,11 +51,11 @@ class SavingsController extends Controller
                 ->where('month', $dt->month);
         }
 
-        $loan = $q->get();
+        $savingsList = $q->get();
 
         return response()->json([
             'success' => true,
-            'data' => SavingsResource::collection($loan),
+            'data' => SavingsResource::collection($savingsList),
         ]);
     }
 

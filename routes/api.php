@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SavingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
@@ -48,14 +49,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/inactive-members', [UserController::class, 'inactiveMembers']);
 
     Route::get('/groups', [GroupController::class, 'index']);
-    Route::get('/groups/{id}', [GroupController::class, 'show']);
+    Route::get('/groups/{groupId}', [GroupController::class, 'show']);
     Route::prefix('groups')->middleware(['role:admin,employee'])->group(function () {
+
+
         Route::post('/', [GroupController::class, 'store']);
-        Route::put('{id}', [GroupController::class, 'update']);
-        Route::delete('{id}', [GroupController::class, 'destroy']);
-        Route::patch('{id}/update-fund-amount', [GroupController::class, 'updateFundAmount']);
-        Route::patch('{id}/facilitator/{userId}', [GroupController::class, 'updateFacilitator']);
-        Route::patch('{id}/chairman/{userId}', [GroupController::class, 'updateChairman']);
+        Route::put('{groupId}', [GroupController::class, 'update']);
+        Route::delete('{groupId}', [GroupController::class, 'destroy']);
+
+        Route::patch('{groupId}/update-fund-amount', [GroupController::class, 'updateFundAmount']);
+        Route::patch('{groupId}/facilitator/{userId}', [GroupController::class, 'updateFacilitator']);
+        Route::patch('{groupId}/chairman/{userId}', [GroupController::class, 'updateChairman']);
+
+        Route::prefix('/{groupId}/reports')->group(function () {
+            Route::get('/', [ReportController::class, 'index']);
+            Route::post('/', [ReportController::class, 'store']);
+            Route::get('{reportId}', [ReportController::class, 'show']);
+            Route::put('{reportId}', [ReportController::class, 'update']);
+            Route::delete('{reportId}', [ReportController::class, 'destroy']);
+        });
     });
 
     Route::prefix('meetings')->group(function () {

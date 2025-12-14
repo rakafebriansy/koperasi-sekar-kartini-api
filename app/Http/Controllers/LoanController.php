@@ -36,6 +36,10 @@ class LoanController extends Controller
     {
         $q = Loan::query();
 
+        if ($request->has('member_id')) {
+            $q->where('user_id', $request->member_id);
+        }
+
         if ($request->filled('search')) {
 
             $search = $request->search;
