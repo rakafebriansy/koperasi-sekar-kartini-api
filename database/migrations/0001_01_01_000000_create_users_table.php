@@ -28,9 +28,7 @@ return new class extends Migration {
             $table->boolean('is_active')->default(false);
 
             $table->unsignedBigInteger('work_area_id')->nullable();
-            // $table->foreign('work_area_id')->references('id')->on('work_areas')->nullOnDelete();
             $table->unsignedBigInteger('group_id')->nullable();
-            // $table->foreign('group_id')->references('id')->on('groups')->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });

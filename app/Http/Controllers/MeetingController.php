@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\MeetingResource;
 use App\Models\Meeting;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Log;
 
 class MeetingController extends Controller
 {
@@ -44,7 +46,6 @@ class MeetingController extends Controller
                     ->orWhere('group_id', $user->group_id);
             });
         }
-
 
         if ($request->has('limit')) {
             $q->limit($request->input('limit'));
@@ -168,4 +169,43 @@ class MeetingController extends Controller
             'message' => 'Meeting deleted successfully.',
         ]);
     }
+
+    public function upcomingMeetings(Request $request)
+    {
+        $q = Meeting::query();
+        $user = auth()->user();
+
+        $now = Carbon::now();
+        $next24Hours = Carbon::now()->addHours(24);
+
+        $q->whereBetween('datetime', [$now, $next24Hours]);
+
+        if ($request->filled('search')) {
+            $q->whereRaw(
+                'LOWER(name) LIKE ?',
+                ['%' . strtolower($request->input('search')) . '%']
+            );
+        }
+
+        if ($user->role === 'group_member') {
+            $q->where(function ($query) use ($user) {
+                $query->whereNull('group_id')
+                    ->orWhere('group_id', $user->group_id);
+            });
+        }
+
+        if ($request->filled('limit')) {
+            $q->limit((int) $request->input('limit'));
+        }
+
+        $meetings = $q
+            ->orderBy('datetime', 'asc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => MeetingResource::collection($meetings),
+        ]);
+    }
+
 }

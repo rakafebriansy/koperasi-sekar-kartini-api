@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -11,72 +12,115 @@ class EmployeeSeeder extends Seeder
 {
     public function run(): void
     {
-        $now = now();
+        $now = Carbon::now();
 
-
-        $users = [
+        DB::table('users')->insert([
             [
-                'name' => 'Siti Qomaria',
-                'member_number' => 'EMP-101',
-                'identity_number' => '3201111111110102',
-                'birth_date' => '1992-06-05',
-                'phone_number' => '081200000102',
-                'address' => 'Jl. Kenanga No. 5, Patrang, Jember',
-                'occupation' => 'Staf Lapangan',
-            ],
-            [
-                'name' => 'Budi Santoso',
-                'member_number' => 'EMP-102',
-                'identity_number' => '3201111111110103',
-                'birth_date' => '1990-11-20',
-                'phone_number' => '081200000103',
-                'address' => 'Jl. Mawar No. 7, Kaliwates, Jember',
-                'occupation' => 'Petugas Kredit',
-            ],
-            [
-                'name' => 'Dewi Hapsari',
-                'member_number' => 'EMP-103',
-                'identity_number' => '3201111111110104',
-                'birth_date' => '1994-01-18',
-                'phone_number' => '081200000104',
-                'address' => 'Jl. Melati No. 3, Ambulu, Jember',
-                'occupation' => 'Petugas Administrasi',
-            ],
-            [
-                'name' => 'Andi Mania',
-                'member_number' => 'EMP-104',
-                'identity_number' => '3201111111110105',
-                'birth_date' => '1989-09-02',
-                'phone_number' => '081200000105',
-                'address' => 'Jl. Teratai No. 2, Sumbersari, Jember',
-                'occupation' => 'Koordinator Lapangan',
-            ],
-        ];
-
-        $rows = [];
-
-        foreach ($users as $emp) {
-            $rows[] = [
-                'name' => $emp['name'],
-                'member_number' => $emp['member_number'],
-                'identity_number' => $emp['identity_number'],
-                'birth_date' => $emp['birth_date'],
-                'phone_number' => $emp['phone_number'],
-                'address' => $emp['address'],
-                'occupation' => $emp['occupation'],
-                'identity_card_photo' => 'uploads/ktp/' . Str::slug($emp['name']) . '.jpg',
-                'self_photo' => 'uploads/self/' . Str::slug($emp['name']) . '.jpg',
+                'name' => 'Ahmad Fauzi',
+                'member_number' => null,
+                'identity_number' => '3509011501900001',
+                'birth_date' => '1990-01-15',
+                'phone_number' => '081234567801',
+                'address' => 'Jl. Letjen Panjaitan, Jember',
+                'occupation' => 'Staff Administrasi',
+                'identity_card_photo' => null,
+                'self_photo' => null,
+                'member_card_photo' => null,
+                'email_verified_at' => $now,
                 'password' => Hash::make('password'),
                 'role' => 'employee',
                 'is_active' => true,
+                'work_area_id' => null,
                 'group_id' => null,
-                'remember_token' => Str::random(10),
+                'remember_token' => null,
                 'created_at' => $now,
                 'updated_at' => $now,
-            ];
-        }
-
-        DB::table('users')->insert($rows);
+            ],
+            [
+                'name' => 'Dewi Lestari',
+                'member_number' => null,
+                'identity_number' => '3509014202920002',
+                'birth_date' => '1992-02-02',
+                'phone_number' => '081234567802',
+                'address' => 'Jl. Kaliurang, Jember',
+                'occupation' => 'Petugas Lapangan',
+                'identity_card_photo' => null,
+                'self_photo' => null,
+                'member_card_photo' => null,
+                'email_verified_at' => $now,
+                'password' => Hash::make('password'),
+                'role' => 'employee',
+                'is_active' => true,
+                'work_area_id' => null,
+                'group_id' => null,
+                'remember_token' => null,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'name' => 'Rizky Pratama',
+                'member_number' => null,
+                'identity_number' => '3509011006950003',
+                'birth_date' => '1995-06-10',
+                'phone_number' => '081234567803',
+                'address' => 'Jl. Mastrip, Jember',
+                'occupation' => 'Operator Data',
+                'identity_card_photo' => null,
+                'self_photo' => null,
+                'member_card_photo' => null,
+                'email_verified_at' => $now,
+                'password' => Hash::make('password'),
+                'role' => 'employee',
+                'is_active' => true,
+                'work_area_id' => null,
+                'group_id' => null,
+                'remember_token' => null,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'name' => 'Siti Nurhaliza',
+                'member_number' => null,
+                'identity_number' => '3509010808890004',
+                'birth_date' => '1989-08-08',
+                'phone_number' => '081234567804',
+                'address' => 'Jl. Trunojoyo, Jember',
+                'occupation' => 'Sekretaris',
+                'identity_card_photo' => null,
+                'self_photo' => null,
+                'member_card_photo' => null,
+                'email_verified_at' => $now,
+                'password' => Hash::make('password'),
+                'role' => 'employee',
+                'is_active' => true,
+                'work_area_id' => null,
+                'group_id' => null,
+                'remember_token' => null,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'name' => 'Budi Santoso',
+                'member_number' => null,
+                'identity_number' => '3509010303870005',
+                'birth_date' => '1987-03-03',
+                'phone_number' => '081234567805',
+                'address' => 'Jl. Gajah Mada, Jember',
+                'occupation' => 'Koordinator Lapangan',
+                'identity_card_photo' => null,
+                'self_photo' => null,
+                'member_card_photo' => null,
+                'email_verified_at' => $now,
+                'password' => Hash::make('password'),
+                'role' => 'employee',
+                'is_active' => true,
+                'work_area_id' => null,
+                'group_id' => null,
+                'remember_token' => null,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+        ]);
     }
 }
 

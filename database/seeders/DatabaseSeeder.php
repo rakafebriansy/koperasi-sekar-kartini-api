@@ -21,13 +21,15 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            WorkAreaSeeder::class,
-            GroupSeeder::class,
             AdminSeeder::class,
             EmployeeSeeder::class,
+            WorkAreaSeeder::class,
+            GroupSeeder::class,
             MemberSeeder::class,
-            // MeetingSeeder::class,
-            // UsersMeetingsSeeder::class,
+            AssignChairmanSeeder::class,
+            MeetingSeeder::class,
+            LoanSeeder::class,
+            ReportSeeder::class,
             SavingsSeeder::class,
         ]);
     }

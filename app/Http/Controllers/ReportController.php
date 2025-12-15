@@ -6,6 +6,7 @@ use App\Http\Resources\ReportResource;
 use App\Models\Group;
 use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
@@ -267,4 +268,21 @@ class ReportController extends Controller
             'message' => 'Report deleted successfully.',
         ]);
     }
+
+    public function memberGrowth()
+    {
+        $data = DB::table('reports')
+            ->select(
+                'year',
+                DB::raw('AVG(group_member_total) as total')
+            )
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
 }

@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/refresh', [AuthController::class, 'refreshToken']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::get('/member-growth', [ReportController::class, 'memberGrowth']);
+
     Route::prefix('/work-areas')->middleware(['role:admin'])->group(function () {
         Route::post('/', [WorkAreaController::class, 'store']);
         Route::get('{id}', [WorkAreaController::class, 'show']);
@@ -41,7 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [UserController::class, 'show']);
         Route::put('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
-        Route::patch('/{id}/group/{groupId}', [UserController::class, 'updateGroup']);
+        Route::patch('/{id}/groups/{groupId}', [UserController::class, 'updateGroup']);
         Route::patch('/{id}/activate', [UserController::class, 'activate']);
     });
 
@@ -72,6 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('meetings')->group(function () {
         Route::get('/', [MeetingController::class, 'index']);
+        Route::get('/upcoming', [MeetingController::class, 'upcomingMeetings']);
         Route::post('/', [MeetingController::class, 'store']);
         Route::get('{id}', [MeetingController::class, 'show']);
         Route::put('{id}', [MeetingController::class, 'update']);
