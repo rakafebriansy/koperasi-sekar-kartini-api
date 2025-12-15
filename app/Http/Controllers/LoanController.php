@@ -6,6 +6,7 @@ use App\Http\Resources\LoanResource;
 use App\Models\Loan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoanController extends Controller
 {
@@ -166,6 +167,22 @@ class LoanController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Loan deleted successfully.',
+        ]);
+    }
+    public function distribution()
+    {
+        $data = DB::table('loans')
+            ->select(
+                'type',
+                DB::raw('SUM(nominal) as total')
+            )
+            ->groupBy('type')
+            ->orderBy('type')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $data
         ]);
     }
 }

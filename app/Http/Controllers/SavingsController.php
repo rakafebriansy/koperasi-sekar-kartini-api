@@ -6,6 +6,7 @@ use App\Http\Resources\SavingsResource;
 use App\Models\Savings;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SavingsController extends Controller
 {
@@ -163,6 +164,23 @@ class SavingsController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Savings deleted successfully.',
+        ]);
+    }
+
+    public function distribution()
+    {
+        $data = DB::table('savings')
+            ->select(
+                'type',
+                DB::raw('SUM(nominal) as total')
+            )
+            ->groupBy('type')
+            ->orderBy('type')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $data
         ]);
     }
 }

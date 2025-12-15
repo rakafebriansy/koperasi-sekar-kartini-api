@@ -29,6 +29,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/member-growth', [ReportController::class, 'memberGrowth']);
+    Route::get(
+        '/savings-distribution-chart',
+        [SavingsController::class, 'distribution']
+    );
+    Route::get(
+        '/loan-distribution-chart',
+        [LoanController::class, 'distribution']
+    );
 
     Route::prefix('/work-areas')->middleware(['role:admin'])->group(function () {
         Route::post('/', [WorkAreaController::class, 'store']);
@@ -53,8 +61,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/groups', [GroupController::class, 'index']);
     Route::get('/groups/{groupId}', [GroupController::class, 'show']);
     Route::prefix('groups')->middleware(['role:admin,employee'])->group(function () {
-
-
         Route::post('/', [GroupController::class, 'store']);
         Route::put('{groupId}', [GroupController::class, 'update']);
         Route::delete('{groupId}', [GroupController::class, 'destroy']);
