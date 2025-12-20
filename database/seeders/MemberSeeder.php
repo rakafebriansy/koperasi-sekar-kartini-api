@@ -55,7 +55,29 @@ class MemberSeeder extends Seeder
             'Desi Anggraini',
         ];
 
-        $users = [];
+        $users = [
+            [
+                'name' => 'Rangkasbitung',
+                'member_number' => 'MBR-999',
+                'identity_number' => '3201113311110001',
+                'birth_date' => '1983-03-12',
+                'phone_number' => '0812345778',
+                'address' => 'Jl. Anggur No. 10, Sumbersari, Jember',
+                'occupation' => 'Atmin',
+                'identity_card_photo' => null,
+                'self_photo' => null,
+                'member_card_photo' => null,
+                'email_verified_at' => $now,
+                'password' => Hash::make('password'),
+                'role' => 'group_member',
+                'is_active' => true,
+                'work_area_id' => $workAreaIds[array_rand($workAreaIds)],
+                'group_id' => $groupIds[array_rand($groupIds)],
+                'remember_token' => Str::random(10),
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]
+        ];
 
         foreach ($names as $i => $name) {
             $users[] = [

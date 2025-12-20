@@ -62,21 +62,21 @@ class ReportSeeder extends Seeder
 
                         'organization_final_score_percentage' => $orgScore,
 
-                        'loan_participation_pb' => rand(0, 20),
-                        'loan_participation_bbm' => rand(0, 20),
-                        'loan_participation_store' => rand(0, 20),
+                        'loan_participation_pb' => rand(100000, 200000000),
+                        'loan_participation_bbm' => rand(100000, 200000000),
+                        'loan_participation_store' => rand(100000, 200000000),
 
-                        'cash_participation' => rand(5, 30),
+                        'cash_participation' => rand(100000, 200000000),
                         'cash_participation_percentage' => rand(60, 100),
 
-                        'savings_participation' => rand(5, 30),
+                        'savings_participation' => rand(100000, 200000000),
                         'savings_participation_percentage' => rand(60, 100),
 
                         'meeting_deposit_percentage' => rand(60, 100),
 
-                        'loan_balance_pb' => rand(5, 50),
-                        'loan_balance_bbm' => rand(5, 50),
-                        'loan_balance_store' => rand(5, 50),
+                        'loan_balance_pb' => rand(100000, 200000000),
+                        'loan_balance_bbm' => rand(100000, 200000000),
+                        'loan_balance_store' => rand(100000, 200000000),
 
                         'receivable_score' => rand(60, 100),
 

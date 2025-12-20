@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ReportResource;
 use App\Models\Group;
+use App\Models\Loan;
 use App\Models\Report;
+use App\Models\Savings;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -87,19 +91,19 @@ class ReportController extends Controller
     ];
 
 
-    public function index(Request $request)
+    public function index(Request $request, string $groupId)
     {
-        $q = Report::query()
-            ->leftJoin('groups', 'groups.id', '=', 'reports.group_id')
-            ->select('reports.*');
+        $q = Report::query()->where('group_id', $groupId);
 
         if ($request->filled('search')) {
-            $year = (int) $request->input('search'); // "2024" → 2024
+            $year = (int) $request->input('search');
 
-            $q->where('reports.year', $year);
+            $q->where('year', $year);
         }
 
         $reports = $q->get();
+
+        Log::info($reports->first());
 
         return response()->json([
             'success' => true,
@@ -282,6 +286,102 @@ class ReportController extends Controller
 
         return response()->json([
             'data' => $data
+        ]);
+    }
+    public function dashboardStats()
+    {
+        $now = Carbon::now();
+        $quarter = ceil($now->month / 3);
+
+        $totalActiveMembers = User::where('role', 'group_member')
+            ->where('is_active', true)
+            ->count();
+
+        $totalInactiveMembers = User::where('role', 'group_member')
+            ->where('is_active', false)
+            ->count();
+
+        $totalMembers = $totalActiveMembers + $totalInactiveMembers;
+
+        $membersJoinedThisQuarter = Report::where('quarter', $quarter)
+            ->where('year', $now->year)
+            ->sum('member_growth_in');
+
+        $membersLeftThisQuarter = Report::where('quarter', $quarter)
+            ->where('year', $now->year)
+            ->sum('member_growth_out');
+
+        $joinedPercentage = $totalMembers > 0
+            ? round(($membersJoinedThisQuarter / $totalMembers) * 100, 2)
+            : 0;
+
+        $leftPercentage = $totalMembers > 0
+            ? round(($membersLeftThisQuarter / $totalMembers) * 100, 2)
+            : 0;
+
+        $usersSavedThisMonth = Savings::where('month', $now->month)
+            ->where('year', $now->year)
+            ->distinct('user_id')
+            ->count('user_id');
+
+        $usersWithoutSavingThisMonth = max(
+            $totalActiveMembers - $usersSavedThisMonth,
+            0
+        );
+
+        $totalSavingsThisMonth = Savings::where('month', $now->month)
+            ->where('year', $now->year)
+            ->sum('nominal');
+
+        $savingPercentage = $totalActiveMembers > 0
+            ? round(($usersSavedThisMonth / $totalActiveMembers) * 100, 2)
+            : 0;
+
+        $usersWithUnpaidLoanThisMonth = Loan::where('month', $now->month)
+            ->where('year', $now->year)
+            ->where('status', 'unpaid')
+            ->distinct('user_id')
+            ->count('user_id');
+
+        $totalUnpaidLoanThisMonth = Loan::where('month', $now->month)
+            ->where('year', $now->year)
+            ->where('status', 'unpaid')
+            ->sum('nominal');
+
+        $loanPercentage = $totalActiveMembers > 0
+            ? round(($usersWithUnpaidLoanThisMonth / $totalActiveMembers) * 100, 2)
+            : 0;
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'meta' => [
+                    'year' => $now->year,
+                    'quarter' => $quarter,
+                ],
+
+                'member' => [
+                    'joined_this_quarter' => (int) $membersJoinedThisQuarter,
+                    'joined_percentage' => $joinedPercentage,
+
+                    'left_this_quarter' => (int) $membersLeftThisQuarter,
+                    'left_percentage' => $leftPercentage,
+
+                    'total_active_members' => $totalActiveMembers,
+                    'total_inactive_members' => $totalInactiveMembers,
+                ],
+
+                'savings' => [
+                    'users_not_saved_this_month' => $usersWithoutSavingThisMonth,
+                    'total_savings_this_month' => (int) $totalSavingsThisMonth,
+                    'saving_percentage' => $savingPercentage,
+                ],
+
+                'loan' => [
+                    'users_unpaid_loan_this_month' => $usersWithUnpaidLoanThisMonth,
+                    'total_unpaid_loan_this_month' => (int) $totalUnpaidLoanThisMonth,
+                    'loan_percentage' => $loanPercentage,
+                ],
+            ],
         ]);
     }
 

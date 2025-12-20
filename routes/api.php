@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/member-growth', [ReportController::class, 'memberGrowth']);
+    Route::get('/dashboard-stats', [ReportController::class, 'dashboardStats']);
     Route::get(
         '/savings-distribution-chart',
         [SavingsController::class, 'distribution']
@@ -60,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/groups', [GroupController::class, 'index']);
     Route::get('/groups/{groupId}', [GroupController::class, 'show']);
+    Route::get('/groups/{groupId}/reports', [ReportController::class, 'index']);
     Route::prefix('groups')->middleware(['role:admin,employee'])->group(function () {
         Route::post('/', [GroupController::class, 'store']);
         Route::put('{groupId}', [GroupController::class, 'update']);
@@ -70,7 +72,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('{groupId}/chairman/{userId}', [GroupController::class, 'updateChairman']);
 
         Route::prefix('/{groupId}/reports')->group(function () {
-            Route::get('/', [ReportController::class, 'index']);
             Route::post('/', [ReportController::class, 'store']);
             Route::get('{reportId}', [ReportController::class, 'show']);
             Route::put('{reportId}', [ReportController::class, 'update']);
