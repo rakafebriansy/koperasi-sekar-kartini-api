@@ -14,11 +14,11 @@ class GroupResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'number' => $this->number,
+            'number' => (int) $this->number,
             'description' => $this->description,
-            'shared_liability_fund_amount' => $this->shared_liability_fund_amount,
-            'group_fund_amount' => $this->group_fund_amount,
-            'social_fund_amount' => $this->social_fund_amount,
+            'shared_liability_fund_amount' => (int) $this->shared_liability_fund_amount,
+            'group_fund_amount' => (int) $this->group_fund_amount,
+            'social_fund_amount' => (int) $this->social_fund_amount,
 
             'work_area' => new WorkAreaResource($this->workArea),
             'chairman' => new UserResource($this->chairman),
