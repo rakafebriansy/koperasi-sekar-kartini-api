@@ -60,6 +60,17 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Specifies the user's FCM token
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
+    }
+
+
     public function workArea()
     {
         return $this->belongsTo(WorkArea::class);
@@ -79,7 +90,7 @@ class User extends Authenticatable
 
     public function savings()
     {
-        return $this->hasMany(Saving::class);
+        return $this->hasMany(Savings::class);
     }
 
     public function loans()
