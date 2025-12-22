@@ -87,7 +87,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/upcoming', [MeetingController::class, 'upcomingMeetings']);
         Route::post('/', [MeetingController::class, 'store']);
         Route::get('{id}', [MeetingController::class, 'show']);
-        Route::put('{id}', [MeetingController::class, 'update']);
+        Route::put('{meeting}', [MeetingController::class, 'update']);
         Route::delete('{id}', [MeetingController::class, 'destroy']);
     });
     

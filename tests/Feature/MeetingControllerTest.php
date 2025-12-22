@@ -20,7 +20,6 @@ class MeetingControllerTest extends TestCase
     {
         parent::setUp();
 
-        // Member user (read-only)
         $this->member = User::create([
             'name' => 'Member Test',
             'identity_number' => '1234567890',
@@ -33,7 +32,6 @@ class MeetingControllerTest extends TestCase
             'is_active' => true,
         ]);
 
-        // Admin user (full access)
         $this->admin = User::create([
             'name' => 'Admin Test',
             'identity_number' => '9876543210',
@@ -46,7 +44,6 @@ class MeetingControllerTest extends TestCase
             'is_active' => true,
         ]);
 
-        // Default authenticate as admin for CRUD tests
         $this->actingAs($this->admin, 'sanctum');
     }
 
@@ -92,7 +89,7 @@ class MeetingControllerTest extends TestCase
             'user_id' => $this->admin->id,
         ]);
 
-        $this->actingAs($this->member, 'sanctum'); // member can access upcoming
+        $this->actingAs($this->member, 'sanctum');
         $response = $this->getJson('/api/meetings/upcoming');
 
         $response->assertStatus(200)
@@ -153,7 +150,6 @@ class MeetingControllerTest extends TestCase
     /** @test */
     public function update_modifies_meeting()
     {
-        // Buat meeting dan pastikan tersimpan di DB
         $meeting = Meeting::create([
             'name' => 'Rapat Lama',
             'type' => 'group',
@@ -174,19 +170,16 @@ class MeetingControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'data' => [
-                    'name' => 'Rapat Diperbarui',
-                    'location' => 'Ruang Baru',
-                ]
+                'message' => 'Meeting updated successfully.',
             ]);
 
-        // Reload dari DB untuk memastikan update tersimpan
         $this->assertDatabaseHas('meetings', [
             'id' => $meeting->id,
             'name' => 'Rapat Diperbarui',
             'location' => 'Ruang Baru',
         ]);
     }
+
 
 
     /** @test */
