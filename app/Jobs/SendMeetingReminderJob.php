@@ -30,7 +30,7 @@ class SendMeetingReminderJob implements ShouldQueue
         Log::info('SendMeetingReminderJob is running...');
         $meetings = Meeting::whereNull('reminder_sent_at')
             ->whereBetween('datetime', [
-                now()->addHours(24)->subMinutes(1),
+                now(),
                 now()->addHours(24)->addMinutes(1),
             ])
             ->get();
