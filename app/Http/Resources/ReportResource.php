@@ -15,6 +15,7 @@ class ReportResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'quarter' => (int) $this->quarter,
             'year' => (int) $this->year,
             'member_growth_in' => (int) $this->member_growth_in,
