@@ -103,8 +103,6 @@ class ReportController extends Controller
 
         $reports = $q->get();
 
-        Log::info($reports->first());
-
         return response()->json([
             'success' => true,
             'data' => ReportResource::collection($reports),

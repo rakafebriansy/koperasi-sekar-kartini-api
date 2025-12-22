@@ -19,7 +19,6 @@ class MeetingResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'datetime' => $this->datetime,
-            'time' => $this->time,
             'location' => $this->location,
             'photo' => $this->photo,
             'description' => $this->description,

@@ -43,15 +43,13 @@ class SendMeetingReminderJob implements ShouldQueue
                 : \App\Models\User::all();
 
             Log::info($meeting->name . ' has ' . count($members) . ' to notify.');
-            Log::info('Sending FCM to users:', $members->pluck('fcm_token')->toArray());
             if ($members && $members->count()) {
-                Log::info('sending to notification...');
                 $notify->sendFcm(
                     $members,
                     'Pengingat Rapat',
                     "Rapat \"{$meeting->name}\" akan dilaksanakan besok",
                     [
-                        'meeting_id' => $meeting->id,
+                        'meeting_id' => (int) $meeting->id,
                         'datetime' => $meeting->datetime,
                         'type' => 'meeting_reminder',
                     ]
