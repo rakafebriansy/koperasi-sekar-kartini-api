@@ -19,7 +19,6 @@ class LoanControllerTest extends TestCase
     {
         parent::setUp();
 
-        // Buat user manual sesuai spesifikasi
         $this->member = User::create([
             'name' => 'Member Test',
             'identity_number' => '1234567890',
@@ -44,7 +43,6 @@ class LoanControllerTest extends TestCase
             'is_active' => true,
         ]);
 
-        // Login sebagai employee untuk test auth
         $this->actingAs($this->employee, 'sanctum');
     }
 
