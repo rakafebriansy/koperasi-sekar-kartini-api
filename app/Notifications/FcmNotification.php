@@ -3,11 +3,11 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
+use NotificationChannels\Fcm\Resources\Notification as FcmNotificationResource;
+
 
 class FcmNotification extends Notification
 {
@@ -20,7 +20,8 @@ class FcmNotification extends Notification
         public string $title,
         public string $body,
         public array $data = []
-    ) {}
+    ) {
+    }
 
     public function via($notifiable)
     {
@@ -30,10 +31,16 @@ class FcmNotification extends Notification
     public function toFcm($notifiable)
     {
         return FcmMessage::create()
-            ->setNotification([
-                'title' => $this->title,
-                'body'  => $this->body,
-            ])
-            ->setData($this->data);
+            ->notification(
+                FcmNotificationResource::create()
+                    ->title($this->title)
+                    ->body($this->body)
+            )
+            ->data(
+                collect($this->data)
+                    ->map(fn($v) => (string) $v)
+                    ->toArray()
+            );
     }
+
 }
