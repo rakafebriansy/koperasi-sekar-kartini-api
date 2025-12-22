@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'registerGroupMember']);
+Route::post('register', [AuthController::class, 'register']);
 
 Route::get('/file/{path}', [FileController::class, 'show'])
 ->where('path', '.*');
@@ -28,6 +28,7 @@ Route::get('/work-areas', [WorkAreaController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/refresh', [AuthController::class, 'refreshToken']);
+    Route::post('/refresh-fcm-token', [AuthController::class, 'storeFcmToken']);
     Route::post('/logout', [AuthController::class, 'logout']);
     
     Route::get('/member-growth', [ReportController::class, 'memberGrowth']);
@@ -107,7 +108,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('{id}', [SavingsController::class, 'update']);
         Route::delete('{id}', [SavingsController::class, 'destroy']);
     });
-    
+
     Route::get('/test-fcm', function () {
         TestFcmNotificationJob::dispatch(auth()->id());
         return response()->json(['status' => 'sent']);

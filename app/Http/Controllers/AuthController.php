@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
-    
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -36,8 +36,8 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'token' => $token, 'data' => new UserResource($user)]);
     }
 
-  
-    public function registerGroupMember(Request $request)
+
+    public function register(Request $request)
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -156,5 +156,18 @@ class AuthController extends Controller
         ]);
     }
 
+    public function storeFcmToken(Request $request)
+    {
+        $request->validate([
+            'fcm_token' => 'required|string'
+        ]);
+
+        $user = $request->user();
+        $user->update([
+            'fcm_token' => $request->fcm_token
+        ]);
+
+        return response()->json(['success' => true, 'status' => 'ok']);
+    }
 }
 
