@@ -31,7 +31,7 @@ class TestFcmNotificationJob implements ShouldQueue
         }
 
         $notificationService->sendFcm(
-            users: $user,
+            users: [$user],
             title: '🔔 Test Notifikasi',
             body: 'FCM berhasil diterima dari Laravel Queue',
             data: [
