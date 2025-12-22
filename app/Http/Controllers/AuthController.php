@@ -163,9 +163,8 @@ class AuthController extends Controller
         ]);
 
         $user = $request->user();
-        $user->update([
-            'fcm_token' => $request->fcm_token
-        ]);
+        $user->fcm_token = $request->fcm_token;
+        $user->save();
 
         return response()->json(['success' => true, 'status' => 'ok']);
     }
