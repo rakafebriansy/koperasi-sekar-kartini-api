@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\WorkArea;
+use Database\Seeders\WorkAreaSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\UploadedFile;
@@ -18,8 +19,7 @@ class AuthControllerTest extends TestCase
     {
         parent::setUp();
 
-        // Jalankan seeder WorkArea agar work_area_id valid
-        $this->seed(\WorkAreaSeeder::class);
+        $this->seed(WorkAreaSeeder::class);
     }
 
     /** @test */
@@ -27,7 +27,7 @@ class AuthControllerTest extends TestCase
     {
         Storage::fake('public');
 
-        $workArea = WorkArea::first(); // ambil work_area dari seeder
+        $workArea = WorkArea::first();
 
         $response = $this->postJson('/api/register', [
             'name' => 'John Doe',
