@@ -42,7 +42,9 @@ class SendMeetingReminderJob implements ShouldQueue
                 ? $meeting->group?->members
                 : \App\Models\User::all();
 
+            Log::info($meeting->name . ' has ' . count($members) . ' to notify.');
             if ($members && $members->count()) {
+                Log::info('sending to notification...');
                 $notify->sendFcm(
                     $members,
                     'Pengingat Rapat',
@@ -55,9 +57,8 @@ class SendMeetingReminderJob implements ShouldQueue
                 );
             }
 
-            $meeting->update([
-                'reminder_sent_at' => now(),
-            ]);
+            $meeting->reminder_sent_at = now();
+            $meeting->save();
         }
         Log::info('SendMeetingReminderJob succeed.');
     }
