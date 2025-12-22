@@ -26,7 +26,6 @@ class ReportControllerTest extends TestCase
             'name' => 'Area Test',
         ]);
 
-        // Admin user
         $this->admin = User::create([
             'name' => 'Admin Test',
             'identity_number' => '9876543210',
@@ -39,7 +38,6 @@ class ReportControllerTest extends TestCase
             'is_active' => true,
         ]);
 
-        // Member user
         $this->member = User::create([
             'name' => 'Member Test',
             'identity_number' => '1234567890',
@@ -52,7 +50,6 @@ class ReportControllerTest extends TestCase
             'is_active' => true,
         ]);
 
-        // Group
         $this->group = Group::create([
             'number' => 1,
             'description' => 'Lorem ipsum dolor sit amet',

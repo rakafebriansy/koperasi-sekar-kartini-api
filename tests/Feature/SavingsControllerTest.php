@@ -18,7 +18,6 @@ class SavingsControllerTest extends TestCase
     {
         parent::setUp();
 
-        // Member user (read only)
         $this->member = User::create([
             'name' => 'Member Test',
             'identity_number' => '1234567890',
@@ -31,7 +30,6 @@ class SavingsControllerTest extends TestCase
             'is_active' => true,
         ]);
 
-        // Admin user (full access)
         $this->admin = User::create([
             'name' => 'Admin Test',
             'identity_number' => '9876543210',
@@ -44,7 +42,6 @@ class SavingsControllerTest extends TestCase
             'is_active' => true,
         ]);
 
-        // Authenticate as admin for CRUD tests
         $this->actingAs($this->admin, 'sanctum');
     }
 
