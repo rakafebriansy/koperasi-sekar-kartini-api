@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SendMeetingReminderJob implements ShouldQueue
 {
@@ -26,12 +27,14 @@ class SendMeetingReminderJob implements ShouldQueue
      */
     public function handle(NotificationService $notify)
     {
+        Log::info('SendMeetingReminderJob is running...');
         $meetings = Meeting::whereNull('reminder_sent_at')
             ->whereBetween('datetime', [
                 now()->addHours(24)->subMinutes(1),
                 now()->addHours(24)->addMinutes(1),
             ])
             ->get();
+        Log::info('SendMeetingReminderJob has ' . count($meetings) . ' meetings on queue.');
 
         foreach ($meetings as $meeting) {
 
@@ -56,5 +59,6 @@ class SendMeetingReminderJob implements ShouldQueue
                 'reminder_sent_at' => now(),
             ]);
         }
+        Log::info('SendMeetingReminderJob succeed.');
     }
 }
