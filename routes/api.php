@@ -10,7 +10,13 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\Userc;
 use App\Http\Controllers\WorkAreaController;
+use App\Jobs\TestFcmNotificationJob;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/test-fcm', function () {
+    TestFcmNotificationJob::dispatch(auth()->id());
+    return response()->json(['status' => 'sent']);
+});
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'registerGroupMember']);
