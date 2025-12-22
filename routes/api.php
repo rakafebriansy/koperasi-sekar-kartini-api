@@ -13,7 +13,7 @@ use App\Http\Controllers\WorkAreaController;
 use App\Jobs\TestFcmNotificationJob;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/test-fcm', function () {
+Route::get('/test-fcm', function () {
     TestFcmNotificationJob::dispatch(auth()->id());
     return response()->json(['status' => 'sent']);
 });
