@@ -49,7 +49,7 @@ class SendMeetingReminderJob implements ShouldQueue
                     "Rapat \"{$meeting->name}\" akan dilaksanakan besok",
                     [
                         'meeting_id' => $meeting->id,
-                        'datetime' => $meeting->datetime->toIso8601String(),
+                        'datetime' => $meeting->datetime,
                         'type' => 'meeting_reminder',
                     ]
                 );
