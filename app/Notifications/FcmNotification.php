@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
 use NotificationChannels\Fcm\FcmMessage;
 
 class FcmNotification extends Notification
@@ -23,7 +24,7 @@ class FcmNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['fcm'];
+        return [FcmChannel::class];
     }
 
     public function toFcm($notifiable)
