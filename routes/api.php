@@ -29,6 +29,7 @@ Route::get('/work-areas', [WorkAreaController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/refresh', [AuthController::class, 'refreshToken']);
     Route::post('/refresh-fcm-token', [AuthController::class, 'storeFcmToken']);
+    Route::post('/change-password', [AuthController::class, 'changePassword']);
     Route::post('/logout', [AuthController::class, 'logout']);
     
     Route::get('/member-growth', [ReportController::class, 'memberGrowth']);

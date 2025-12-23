@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
-
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -167,6 +166,43 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json(['success' => true, 'status' => 'ok']);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'new_password' => ['required', 'string', 'min:8'],
+        ], [
+            'current_password.required' => 'Password lama wajib diisi.',
+            'new_password.required' => 'Password baru wajib diisi.',
+            'new_password.min' => 'Password baru minimal 8 karakter.',
+        ]);
+
+        $user = $request->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password lama tidak sesuai.',
+            ], 422);
+        }
+
+        if (Hash::check($request->new_password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Password baru tidak boleh sama dengan password lama.',
+            ], 422);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password successfully updated.',
+        ]);
     }
 }
 
