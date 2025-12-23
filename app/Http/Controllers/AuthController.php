@@ -171,17 +171,17 @@ class AuthController extends Controller
     public function changePassword(Request $request)
     {
         $request->validate([
-            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string'],
             'new_password' => ['required', 'string', 'min:8'],
         ], [
-            'current_password.required' => 'Password lama wajib diisi.',
+            'password.required' => 'Password lama wajib diisi.',
             'new_password.required' => 'Password baru wajib diisi.',
             'new_password.min' => 'Password baru minimal 8 karakter.',
         ]);
 
         $user = $request->user();
 
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (!Hash::check($request->password, $user->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Password lama tidak sesuai.',
