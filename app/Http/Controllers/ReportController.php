@@ -147,7 +147,7 @@ class ReportController extends Controller
             'loan_balance_bbm' => ['required', 'integer'],
             'loan_balance_store' => ['required', 'integer'],
             'financial_final_score_percentage' => ['required', 'numeric'],
-            'receivable_score' => ['required', 'integer'],
+            'receivable_score' => ['required', 'numeric'],
             'combined_final_score_percentage' => ['required', 'numeric'],
             'criteria' => ['required', 'in:sangat_baik,baik,cukup,kurang,sangat_kurang'],
         ], $this
@@ -237,7 +237,7 @@ class ReportController extends Controller
             'loan_balance_pb' => ['nullable', 'integer'],
             'loan_balance_bbm' => ['nullable', 'integer'],
             'loan_balance_store' => ['nullable', 'integer'],
-            'receivable_score' => ['nullable', 'integer'],
+            'receivable_score' => ['nullable', 'numeric'],
             'financial_final_score_percentage' => ['nullable', 'numeric'],
             'combined_final_score_percentage' => ['nullable', 'numeric'],
             'criteria' => ['nullable', 'in:sangat_baik,baik,cukup,kurang,sangat_kurang'],
