@@ -20,7 +20,7 @@ class LoanResource extends JsonResource
             'nominal' => (int) $this->nominal,
             'status' => $this->status,
             'year' => (int) $this->year,
-            'month' => $this->month,
+            'month' => (int) $this->month,
             'user' => new UserResource($this->user),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
