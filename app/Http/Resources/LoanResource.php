@@ -17,9 +17,9 @@ class LoanResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
-            'nominal' => $this->nominal,
-            'status' => $this->status,
-            'year' => $this->year,
+            'nominal' => (int) $this->nominal,
+            'status' => (int) $this->status,
+            'year' => (int) $this->year,
             'month' => $this->month,
             'user' => new UserResource($this->user),
             'created_at' => $this->created_at,

@@ -17,9 +17,9 @@ class SavingsResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
-            'nominal' => $this->nominal,
-            'year' => $this->year,
-            'month' => $this->month,
+            'nominal' => (int) $this->nominal,
+            'year' => (int) $this->year,
+            'month' => (int) $this->month,
             'user' => new UserResource($this->user),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
