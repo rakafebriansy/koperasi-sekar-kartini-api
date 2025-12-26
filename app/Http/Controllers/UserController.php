@@ -322,7 +322,7 @@ class UserController extends Controller
             $member->update(['is_active' => (int) $request->is_active]);
             return response()->json([
                 'success' => true,
-                'message' => 'Member ' . $request->is_active ? 'activated' : 'deactivated' . ' successfully.',
+                'message' => 'Member ' . $member->is_active ? 'activated' : 'deactivated' . ' successfully.',
                 'data' => new UserResource($member),
             ]);
         }
