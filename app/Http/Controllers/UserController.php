@@ -48,7 +48,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $q = User::query();
+        $q = User::query()->where('is_active', true);
 
         if ($request->input('role')) {
             $q = $q->where('role', $request->input('role'));
