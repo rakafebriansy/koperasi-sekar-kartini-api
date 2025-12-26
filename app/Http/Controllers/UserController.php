@@ -319,7 +319,7 @@ class UserController extends Controller
 
         if ($request->has('is_active')) {
 
-            $member->update(['is_active' => $request->is_active]);
+            $member->update(['is_active' => (int) $request->is_active]);
             return response()->json([
                 'success' => true,
                 'message' => 'Member ' . $request->is_active ? 'activated' : 'deactivated' . ' successfully.',
