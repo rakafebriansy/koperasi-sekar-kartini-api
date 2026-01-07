@@ -66,9 +66,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/groups', [GroupController::class, 'index']);
     Route::get('/groups/{groupId}', [GroupController::class, 'show']);
     Route::get('/groups/{groupId}/reports', [ReportController::class, 'index']);
+
+    Route::put('/groups/{groupId}', [GroupController::class, 'update']);
     Route::prefix('groups')->middleware(['role:admin,employee'])->group(function () {
         Route::post('/', [GroupController::class, 'store']);
-        Route::put('{groupId}', [GroupController::class, 'update']);
         Route::delete('{groupId}', [GroupController::class, 'destroy']);
         
         Route::patch('{groupId}/update-fund-amount', [GroupController::class, 'updateFundAmount']);
