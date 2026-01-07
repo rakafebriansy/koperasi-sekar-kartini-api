@@ -68,12 +68,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/groups/{groupId}/reports', [ReportController::class, 'index']);
 
     Route::put('/groups/{groupId}', [GroupController::class, 'update']);
-    Route::patch('/groups/{groupId}/facilitator/{userId}', [GroupController::class, 'updateFacilitator']);
+    Route::patch('/groups/{groupId}/update-fund-amount', [GroupController::class, 'updateFundAmount']);
     Route::prefix('groups')->middleware(['role:admin,employee'])->group(function () {
         Route::post('/', [GroupController::class, 'store']);
         Route::delete('{groupId}', [GroupController::class, 'destroy']);
         
-        Route::patch('{groupId}/update-fund-amount', [GroupController::class, 'updateFundAmount']);
+        Route::patch('{groupId}/facilitator/{userId}', [GroupController::class, 'updateFacilitator']);
         Route::patch('{groupId}/chairman/{userId}', [GroupController::class, 'updateChairman']);
         
         Route::prefix('/{groupId}/reports')->group(function () {
