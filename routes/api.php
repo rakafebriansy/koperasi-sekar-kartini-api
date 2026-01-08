@@ -51,11 +51,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     Route::get('/users', [UserController::class, 'index']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
     Route::prefix('users')->group(function () {
         Route::middleware(['role:admin'])->group(function() {
             Route::post('/', [UserController::class, 'store']);
             Route::get('/{id}', [UserController::class, 'show']);
-            Route::put('/{id}', [UserController::class, 'update']);
             Route::delete('/{id}', [UserController::class, 'destroy']);
             Route::patch('/{id}/groups/{groupId}', [UserController::class, 'updateGroup']);
         });
