@@ -51,13 +51,17 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     Route::get('/users', [UserController::class, 'index']);
-    Route::prefix('users')->middleware(['role:admin'])->group(function () {
-        Route::post('/', [UserController::class, 'store']);
-        Route::get('/{id}', [UserController::class, 'show']);
-        Route::put('/{id}', [UserController::class, 'update']);
-        Route::delete('/{id}', [UserController::class, 'destroy']);
-        Route::patch('/{id}/groups/{groupId}', [UserController::class, 'updateGroup']);
-        Route::patch('/{id}/activate', [UserController::class, 'activate']);
+    Route::prefix('users')->group(function () {
+        Route::middleware(['role:admin'])->group(function() {
+            Route::post('/', [UserController::class, 'store']);
+            Route::get('/{id}', [UserController::class, 'show']);
+            Route::put('/{id}', [UserController::class, 'update']);
+            Route::delete('/{id}', [UserController::class, 'destroy']);
+            Route::patch('/{id}/groups/{groupId}', [UserController::class, 'updateGroup']);
+        });
+        Route::middleware(['role:admin,employee'])->group(function() {
+            Route::patch('/{id}/activate', [UserController::class, 'activate']);
+        });
     });
     
     Route::get('/unlisted-members', [UserController::class, 'unlistedMembers']);
