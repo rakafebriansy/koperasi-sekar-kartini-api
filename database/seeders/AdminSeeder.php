@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
         $workAreas = DB::table('work_areas')->pluck('id', 'name')->toArray();
 
         $users = [
-            'name' => 'Rahmat Admin',
+            'name' => 'Erni',
             'member_number' => 'ADM-001',
             'identity_number' => '3201111111110001',
             'birth_date' => '1988-03-12',
